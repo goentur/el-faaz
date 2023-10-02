@@ -1,0 +1,1 @@
+@if ($data->type === 'd')<span class="badge bg-danger">Developer</span>@else<span class="badge bg-primary">Fitur Aplikasi</span>@endif

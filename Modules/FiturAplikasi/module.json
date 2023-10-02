@@ -1,0 +1,11 @@
+{
+    "name": "FiturAplikasi",
+    "alias": "fituraplikasi",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\FiturAplikasi\\Providers\\FiturAplikasiServiceProvider"
+    ],
+    "files": []
+}

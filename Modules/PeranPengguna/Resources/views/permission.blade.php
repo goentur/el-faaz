@@ -1,0 +1,1 @@
+@forelse ($data->getAllPermissions() as $permission)<span class="badge bg-primary">{{ $permission->name }}</span> @empty <span class="badge bg-danger">TIDAK ADA</span> @endforelse

@@ -1,0 +1,11 @@
+{
+    "name": "PeranPengguna",
+    "alias": "peranpengguna",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\PeranPengguna\\Providers\\PeranPenggunaServiceProvider"
+    ],
+    "files": []
+}
