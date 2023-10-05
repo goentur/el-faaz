@@ -25,3 +25,23 @@ function dekrip($string)
      $output = openssl_decrypt(base64_decode($string), $encrypt_method, $key, 0, $iv);
      return $output;
 }
+function id()
+{
+     return date('ymdHis') . '' . rand(pow(10, 5 - 1), pow(10, 5) - 1);
+}
+function rupiah($d)
+{
+     return number_format($d, 0, ',', ',');
+}
+function fileName()
+{
+     $s = strtoupper(md5(uniqid(rand(), true)));
+     $kode =
+          substr($s, 0, 8) . '-' .
+          substr($s, 8, 4) . '-' .
+          substr($s, 12, 4) . '-' .
+          substr($s, 16, 4) . '-' .
+          substr($s, 20) . '-' .
+          time();
+     return $kode;
+}

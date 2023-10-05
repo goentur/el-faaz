@@ -15,6 +15,7 @@
         "mews/captcha": "^3.3",
         "nwidart/laravel-modules": "^10.0",
         "spatie/laravel-permission": "^5.11",
+        "unisharp/laravel-filemanager": "^2.6",
         "yajra/laravel-datatables": "^10.0"
     },
     "require-dev": {

@@ -1,0 +1,11 @@
+{
+    "name": "Pemasok",
+    "alias": "pemasok",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Pemasok\\Providers\\PemasokServiceProvider"
+    ],
+    "files": []
+}

@@ -1,0 +1,1 @@
+<span class="badge bg-danger">MASTER DATA TIDAK DITEMUKAN</span>

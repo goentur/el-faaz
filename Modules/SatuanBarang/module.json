@@ -1,0 +1,11 @@
+{
+    "name": "SatuanBarang",
+    "alias": "satuanbarang",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\SatuanBarang\\Providers\\SatuanBarangServiceProvider"
+    ],
+    "files": []
+}

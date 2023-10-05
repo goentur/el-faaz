@@ -22,7 +22,7 @@ return new class extends Migration
             $table->bigInteger('hpp');
             $table->bigInteger('harga_jual');
             $table->bigInteger('harga_anggota');
-            $table->string('foto')->nullable();
+            $table->text('foto')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

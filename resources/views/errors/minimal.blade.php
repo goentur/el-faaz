@@ -3,8 +3,14 @@
 
 <head>
     @include('layouts.partials.head')
-    <script src="{{ asset('js/settings.js') }}"></script>
-    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+<style>
+	body {
+		opacity: 0;
+	}
+	body::-webkit-scrollbar {
+		width: 0px
+	}
+</style>
 </head>
 
 <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
@@ -27,7 +33,6 @@
 			</div>
 		</div>
 	</main>
-    @include('layouts.partials.script')
 </body>
 
 </html>

@@ -14,7 +14,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('penjualan_details', function (Blueprint $table) {
-            $table->id();
+            $table->unsignedBigInteger('id')->primary();
             $table->foreignIdFor(Penjualan::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Barang::class)->constrained()->cascadeOnDelete();
             $table->smallInteger('kuantitas');

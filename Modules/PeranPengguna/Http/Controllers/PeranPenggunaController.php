@@ -20,7 +20,8 @@ class PeranPenggunaController extends Controller
     public function index(Request $request, Builder $builder)
     {
         if ($request->ajax()) {
-            return DataTables::eloquent(Role::with('permissions')->select('id', 'name', 'guard_name')->whereNotIn('name', ['developer']))
+            // return DataTables::eloquent(Role::with('permissions')->select('id', 'name', 'guard_name')->whereNotIn('name', ['developer']))
+            return DataTables::eloquent(Role::with('permissions')->select('id', 'name', 'guard_name'))
                 ->addIndexColumn()
                 ->editColumn('id', function (Role $data) {
                     return view($this->attribute['view'] . 'permission', compact('data'));

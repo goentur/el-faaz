@@ -14,7 +14,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('jurnal_details', function (Blueprint $table) {
-            $table->id();
+            $table->unsignedBigInteger('id')->primary();
             $table->foreignIdFor(Akun::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Jurnal::class)->constrained()->cascadeOnDelete();
             $table->bigInteger('debet');

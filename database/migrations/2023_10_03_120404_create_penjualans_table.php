@@ -14,7 +14,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('penjualans', function (Blueprint $table) {
-            $table->id();
+            $table->unsignedBigInteger('id')->primary();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->unsignedBigInteger('anggota_id')->nullable();
             $table->string('nama_pembeli');

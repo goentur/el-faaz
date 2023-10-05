@@ -14,7 +14,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pembelians', function (Blueprint $table) {
-            $table->id();
+            $table->unsignedBigInteger('id')->primary();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Pemasok::class)->constrained()->cascadeOnDelete();
             $table->bigInteger('tanggal');

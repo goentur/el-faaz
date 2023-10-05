@@ -1,4 +1,11 @@
 <ul class="sidebar-nav">
+    @can('dashboard')
+    <li class="sidebar-item{{ request()->is('dashboard*') ? ' active' : '' }}">
+        <a class="sidebar-link" href="{{ route('dashboard.index') }}">
+            <i class="align-middle" data-feather="slack"></i> <span class="align-middle">Dashboard</span>
+        </a>
+    </li>
+    @endcan
     @role(['developer'])
     <li class="sidebar-header">
         Developer
@@ -9,13 +16,6 @@
         </a>
     </li>
     @endrole
-    @can('dashboard')
-    <li class="sidebar-item{{ request()->is('dashboard*') ? ' active' : '' }}">
-        <a class="sidebar-link" href="{{ route('dashboard.index') }}">
-            <i class="align-middle" data-feather="slack"></i> <span class="align-middle">Dashboard</span>
-        </a>
-    </li>
-    @endcan
     @can('pengguna')
     <li class="sidebar-header">
         Pengguna
@@ -33,4 +33,44 @@
         </a>
     </li>
     @endcan
+    @canany(['akun', 'anggota', 'pemasok','satuan barang','pengguna'])
+    <li class="sidebar-header">
+        Master Data
+    </li>
+    @can('akun')
+    <li class="sidebar-item{{ request()->is('akun*') ? ' active' : '' }}">
+        <a class="sidebar-link" href="{{ route('akun.index') }}">
+            <i class="align-middle" data-feather="credit-card"></i> <span class="align-middle">Akun</span>
+        </a>
+    </li>
+    @endcan
+    @can('anggota')
+    <li class="sidebar-item{{ request()->is('anggota*') ? ' active' : '' }}">
+        <a class="sidebar-link" href="{{ route('anggota.index') }}">
+            <i class="align-middle" data-feather="users"></i> <span class="align-middle">Anggota</span>
+        </a>
+    </li>
+    @endcan
+    @can('pemasok')
+    <li class="sidebar-item{{ request()->is('pemasok*') ? ' active' : '' }}">
+        <a class="sidebar-link" href="{{ route('pemasok.index') }}">
+            <i class="align-middle" data-feather="truck"></i> <span class="align-middle">Pemasok</span>
+        </a>
+    </li>
+    @endcan
+    @can('satuan barang')
+    <li class="sidebar-item{{ request()->is('satuan-barang*') ? ' active' : '' }}">
+        <a class="sidebar-link" href="{{ route('satuan-barang.index') }}">
+            <i class="align-middle" data-feather="box"></i> <span class="align-middle">Satuan Barang</span>
+        </a>
+    </li>
+    @endcan
+    @can('barang')
+    <li class="sidebar-item{{ request()->is('barang*') ? ' active' : '' }}">
+        <a class="sidebar-link" href="{{ route('barang.index') }}">
+            <i class="align-middle" data-feather="package"></i> <span class="align-middle">Barang</span>
+        </a>
+    </li>
+    @endcan
+    @endcanany
 </ul>

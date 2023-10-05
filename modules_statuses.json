@@ -2,5 +2,10 @@
     "Dashboard": true,
     "FiturAplikasi": true,
     "Pengguna": true,
-    "PeranPengguna": true
+    "PeranPengguna": true,
+    "Akun": true,
+    "Anggota": true,
+    "Pemasok": true,
+    "SatuanBarang": true,
+    "Barang": true
 }

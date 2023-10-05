@@ -14,7 +14,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('angsuran_details', function (Blueprint $table) {
-            $table->id();
+            $table->unsignedBigInteger('id')->primary();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Angsuran::class)->constrained()->cascadeOnDelete();
             $table->bigInteger('tanggal');

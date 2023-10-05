@@ -1,0 +1,11 @@
+{
+    "name": "Akun",
+    "alias": "akun",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Akun\\Providers\\AkunServiceProvider"
+    ],
+    "files": []
+}
