@@ -92,7 +92,19 @@
                             </span>
                             @enderror
                         </div>
-                        <div class="col-lg-12">
+                        <div class="col-lg-6">
+                            <label for="ukuran" class="form-label">Ukuran <span class="text-danger">*</span></label>
+                            <select required name="ukuran[]" id="ukuran" class="form-control" multiple>
+                                <option value="">Pilih lebih dari satu</option>
+                                @foreach ($ukurans as $ukuran)
+                                <option value="{{ $ukuran->id }}"{{in_array($ukuran->id, old("ukuran") ?: []) ? ' selected': ''}}{{ isset($data)&&$data->ukuran->contains($ukuran->id)? ' selected': '' }}>{{ $ukuran->nama }}</option>
+                                @endforeach
+                            </select>
+                            @error('ukuran')
+                            <strong class="text-danger text-validation">{{ $message }}</strong>
+                            @enderror
+                        </div>
+                        <div class="col-lg-6">
                             <label for="file-manager" class="form-label">Foto <span class="text-danger">*</span></label>
                             <div class="input-group">
                                 <a id="file-manager" data-input="foto" data-preview="holder" class="btn btn-primary">
@@ -103,7 +115,9 @@
                                 <a href="{{ $data->foto }}" class="btn btn-primary" target="popup" onclick="window.open('{{ $data->foto }}','{{ $data->nama }}','width=800,height=600')"><i class="fa-regular fa-image"></i> Lihat Foto</a>
                                 @endif
                             </div>
-                            <img id="holder" style="margin-top:15px;max-height:100px;">
+                            @error('foto')
+                            <strong class="text-danger text-validation">{{ $message }}</strong>
+                            @enderror
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Simpan</button>
@@ -120,6 +134,7 @@
     $(function() {
         new Choices(document.querySelector("select#pemasok"));
         new Choices(document.querySelector("select#satuan"));
+        new Choices(document.querySelector("select#ukuran"));
     });
 </script>
 @endpush

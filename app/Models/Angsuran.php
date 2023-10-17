@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Angsuran extends Model
 {
     use HasFactory;
+    public $incrementing = false;
+    protected $fillable = ['id', 'transaksi_id', 'jenis', 'status'];
 }

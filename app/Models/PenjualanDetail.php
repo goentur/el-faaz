@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class PenjualanDetail extends Model
 {
     use HasFactory;
+    public $incrementing = false;
+    protected $fillable = ['id', 'penjualan_id', 'barang_id', 'kuantitas', 'harga', 'status'];
 }

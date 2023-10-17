@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('anggota_id')->nullable();
             $table->string('nama_pembeli');
             $table->bigInteger('tanggal');
+            $table->bigInteger('bayar');
             $table->bigInteger('total');
             $table->tinyInteger('jenis')->comment('1 = penjualan anggota, 2 = penjualan non anggota, 3 = penjualan marketplace');
             $table->tinyInteger('status')->comment('1 = belum, 2 = sudah, 3 = masukan ke jurnal');

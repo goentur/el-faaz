@@ -70,8 +70,8 @@ class PeranPenggunaController extends Controller
         $request->validate([
             'name' => 'required|string|max:255|unique:roles',
             'guard_name' => 'required|string|max:255',
-            'fitur'    => 'required|array|min:1',
-            'fitur.*'  => 'required|string|distinct|min:1',
+            'fitur' => 'required|array|min:1',
+            'fitur.*' => 'required|string|distinct|min:1',
         ]);
         $role = Role::create([
             'name' => $request->name,
@@ -101,8 +101,8 @@ class PeranPenggunaController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'guard_name' => 'required|string|max:255',
-            'fitur'    => 'required|array|min:1',
-            'fitur.*'  => 'required|string|distinct|min:1',
+            'fitur' => 'required|array|min:1',
+            'fitur.*' => 'required|string|distinct|min:1',
         ]);
         $role = Role::select('id')->find(dekrip($id));
         $role->update([

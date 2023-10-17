@@ -63,3 +63,18 @@ select[disabled] {
 .text-validation{
   font-size: 12px;
 }
+.fw-12 {
+    font-size: 12px;
+}
+.fw-10 {
+    font-size: 10px;
+}
+.product {
+    -ms-flex: 201px;
+    flex: 0 0 201px;
+}
+.product .card .card-img-top {
+    height: 185px;
+    object-fit: contain;
+}
+hr.dashed{border: 1px dashed #000;}

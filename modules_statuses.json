@@ -7,5 +7,7 @@
     "Anggota": true,
     "Pemasok": true,
     "SatuanBarang": true,
-    "Barang": true
+    "Barang": true,
+    "Penjualan": true,
+    "Ukuran": true
 }

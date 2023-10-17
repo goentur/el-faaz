@@ -1,0 +1,11 @@
+{
+    "name": "Ukuran",
+    "alias": "ukuran",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Ukuran\\Providers\\UkuranServiceProvider"
+    ],
+    "files": []
+}

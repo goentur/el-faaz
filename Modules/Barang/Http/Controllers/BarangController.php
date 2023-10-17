@@ -3,8 +3,10 @@
 namespace Modules\Barang\Http\Controllers;
 
 use App\Models\Barang;
+use App\Models\BarangUkuran;
 use App\Models\Pemasok;
 use App\Models\Satuan;
+use App\Models\Ukuran;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Yajra\DataTables\Facades\DataTables;
@@ -22,7 +24,7 @@ class BarangController extends Controller
     public function index(Request $request, Builder $builder)
     {
         if ($request->ajax()) {
-            return DataTables::eloquent(Barang::with('pemasok', 'satuan')->select('id', 'pemasok_id', 'satuan_id', 'nama', 'stok', 'hpp', 'harga_jual', 'harga_anggota', 'foto'))
+            return DataTables::eloquent(Barang::with('pemasok', 'ukuran', 'satuan')->select('id', 'pemasok_id', 'satuan_id', 'nama', 'stok', 'hpp', 'harga_jual', 'harga_anggota', 'foto'))
                 ->addIndexColumn()
                 ->editColumn('foto', function (Barang $data) {
                     return view($this->attribute['view'] . 'foto', [
@@ -34,6 +36,17 @@ class BarangController extends Controller
                 })
                 ->editColumn('satuan.nama', function (Barang $data) {
                     return $data->satuan ? $data->satuan->nama : view('errors.master-data');
+                })
+                ->editColumn('ukuran.nama', function (Barang $data) {
+                    $ukuran = "";
+                    foreach ($data->ukuran as $u) {
+                        if ($u === $data->ukuran->last()) {
+                            $ukuran .= $u->nama;
+                        } else {
+                            $ukuran .= $u->nama . ", ";
+                        }
+                    }
+                    return $ukuran;
                 })
                 ->editColumn('hpp', function (Barang $data) {
                     return rupiah($data->hpp);
@@ -58,6 +71,7 @@ class BarangController extends Controller
             ->addColumn(['class' => 'w-10 top', 'data' => 'pemasok.nama', 'name' => 'pemasok.nama', 'title' => 'PEMASOK'])
             ->addColumn(['class' => 'top', 'data' => 'nama', 'name' => 'nama', 'title' => 'NAMA'])
             ->addColumn(['class' => 'w-10 top', 'data' => 'satuan.nama', 'name' => 'satuan.nama', 'title' => 'SATUAN'])
+            ->addColumn(['class' => 'w-10 top', 'data' => 'ukuran.nama', 'name' => 'ukuran.nama', 'title' => 'UKURAN'])
             ->addColumn(['class' => 'w-1 text-center top', 'data' => 'stok', 'name' => 'stok', 'title' => 'STOK'])
             ->addColumn(['class' => 'w-1 text-end top', 'data' => 'hpp', 'name' => 'hpp', 'title' => 'HPP'])
             ->addColumn(['class' => 'w-1 text-end top', 'data' => 'harga_jual', 'name' => 'harga_jual', 'title' => 'JUAL'])
@@ -85,6 +99,7 @@ class BarangController extends Controller
             'attribute' => $this->attribute,
             'pemasoks' => Pemasok::select('id', 'nama')->get(),
             'satuans' => Satuan::select('id', 'nama')->get(),
+            'ukurans' => Ukuran::select('id', 'nama')->get(),
         ];
         return view($this->attribute['view'] . 'form', $data);
     }
@@ -94,6 +109,8 @@ class BarangController extends Controller
         $request->validate([
             'pemasok' => 'required|numeric',
             'satuan' => 'required|numeric',
+            'ukuran' => 'required|array|min:1',
+            'ukuran.*' => 'required|numeric|distinct|min:1',
             'nama' => 'required|string|max:255',
             'stok' => 'required|numeric',
             'hpp' => 'required|string',
@@ -101,7 +118,7 @@ class BarangController extends Controller
             'harga_anggota' => 'required|string',
             'foto' => 'required|string',
         ]);
-        Barang::create([
+        $barang = Barang::create([
             'pemasok_id' => $request->pemasok,
             'satuan_id' => $request->satuan,
             'nama' => $request->nama,
@@ -111,6 +128,7 @@ class BarangController extends Controller
             'harga_anggota' => str_replace(",", "", $request->harga_anggota),
             'foto' => $request->foto,
         ]);
+        $barang->ukuran()->sync($request->ukuran);
         return redirect()->route($this->attribute['link'] . 'index')->with(['success' => 'Data berhasil disimpan']);
     }
 
@@ -123,9 +141,10 @@ class BarangController extends Controller
     {
         $kirim = [
             'attribute' => $this->attribute,
-            'data' => Barang::select('id', 'pemasok_id', 'satuan_id', 'nama', 'stok', 'hpp', 'harga_jual', 'harga_anggota', 'foto')->find(dekrip($id)),
+            'data' => Barang::with('ukuran')->select('id', 'pemasok_id', 'satuan_id', 'nama', 'stok', 'hpp', 'harga_jual', 'harga_anggota', 'foto')->find(dekrip($id)),
             'pemasoks' => Pemasok::select('id', 'nama')->get(),
             'satuans' => Satuan::select('id', 'nama')->get(),
+            'ukurans' => Ukuran::select('id', 'nama')->get(),
         ];
         return view($this->attribute['view'] . 'form', $kirim);
     }
@@ -135,13 +154,16 @@ class BarangController extends Controller
         $request->validate([
             'pemasok' => 'required|numeric',
             'satuan' => 'required|numeric',
+            'ukuran' => 'required|array|min:1',
+            'ukuran.*' => 'required|numeric|distinct|min:1',
             'nama' => 'required|string|max:255',
             'hpp' => 'required|string',
             'harga_jual' => 'required|string',
             'harga_anggota' => 'required|string',
             'foto' => 'required|string',
         ]);
-        Barang::select('id')->find(dekrip($id))->update([
+        $barang = Barang::with('ukuran')->select('id')->find(dekrip($id));
+        $barang->update([
             'pemasok_id' => $request->pemasok,
             'satuan_id' => $request->satuan,
             'nama' => $request->nama,
@@ -150,6 +172,7 @@ class BarangController extends Controller
             'harga_anggota' => str_replace(",", "", $request->harga_anggota),
             'foto' => $request->foto,
         ]);
+        $barang->ukuran()->sync($request->ukuran);
         return redirect()->route($this->attribute['link'] . 'index')->with(['success' => 'Data berhasil diubah']);
     }
 
