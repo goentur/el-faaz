@@ -1,0 +1,11 @@
+{
+    "name": "Gudang",
+    "alias": "gudang",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Gudang\\app\\Providers\\GudangServiceProvider"
+    ],
+    "files": []
+}

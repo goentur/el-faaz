@@ -25,5 +25,4 @@ Route::middleware('auth', 'can:penjualan')->prefix('penjualan')->group(function 
     Route::post('keranjang/tambah', [KeranjangPenjualanController::class, 'tambah'])->name('penjualan.keranjang.tambah');
     Route::post('keranjang/hapus', [KeranjangPenjualanController::class, 'hapus'])->name('penjualan.keranjang.hapus');
     Route::post('keranjang/ubah-kuantitas', [KeranjangPenjualanController::class, 'ubahKuantitas'])->name('penjualan.keranjang.ubah-kuantitas');
-    // Route::get('print', [KeranjangPenjualanController::class, 'print'])->name('penjualan.print');
 });

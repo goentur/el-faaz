@@ -40,9 +40,9 @@ class PenjualanController extends Controller
                 $request->validate([
                     'nama' => 'required|string',
                 ]);
-                $barangs = Barang::with('pemasok', 'satuan', 'ukuran')->select('id', 'pemasok_id', 'satuan_id', 'nama', 'stok', 'harga_jual', 'foto')->orderBy('id', 'desc')->where('nama', 'like', '%' . $request->nama . '%')->limit($limit);
+                $barangs = Barang::with('satuan', 'ukuran')->select('id', 'satuan_id', 'nama', 'stok', 'harga_jual', 'foto')->orderBy('id', 'desc')->where('nama', 'like', '%' . $request->nama . '%')->limit($limit);
             } else {
-                $barangs = Barang::with('pemasok', 'satuan', 'ukuran')->select('id', 'pemasok_id', 'satuan_id', 'nama', 'stok', 'harga_jual', 'foto')->orderBy('id', 'desc')->limit($limit);
+                $barangs = Barang::with('satuan', 'ukuran')->select('id', 'satuan_id', 'nama', 'stok', 'harga_jual', 'foto')->orderBy('id', 'desc')->limit($limit);
             }
             if ($barangs->count() > 0) {
                 $fullData = [];
@@ -58,7 +58,6 @@ class PenjualanController extends Controller
                     $fullData[] = [
                         'id' => enkrip($barang->id),
                         'status' => $barang->stok < 1 ? 'po' : 'siap',
-                        'pemasok' => $barang->pemasok ? '( ' . $barang->pemasok->nama . ' )' : '( - )',
                         'satuan' => $barang->satuan ? $barang->satuan->nama : '',
                         'nama' => strlen($barang->nama) >= 60 ? substr($barang->nama, 0, 60) . '...' : $barang->nama,
                         'stok' => $barang->stok,
@@ -69,7 +68,7 @@ class PenjualanController extends Controller
                 }
                 return response()->json($fullData, 200);
             } else {
-                return response()->json('Barang tidak ditemukan', 404);
+                return response()->json(null, 404);
             }
         }
     }

@@ -77,10 +77,4 @@
     </div>
 </div>
 @endsection
-@push('js')
-<script>
-    $(function() {
-        new Choices(document.querySelector("#peran"));
-    });
-</script>
-@endpush
+@push('js')<script>$(function() {new Choices(document.querySelector("#peran"));});</script>@endpush

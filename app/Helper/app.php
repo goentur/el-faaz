@@ -27,7 +27,7 @@ function dekrip($string)
 }
 function id()
 {
-     return date('ymdHis') . '' . rand(pow(10, 5 - 1), pow(10, 5) - 1);
+     return date('myd') . '' . rand(pow(10, 5 - 1), pow(10, 5) - 1) . '' . date('siH');
 }
 function rupiah($d)
 {

@@ -66,15 +66,18 @@ select[disabled] {
 .fw-12 {
     font-size: 12px;
 }
+.fw-11 {
+    font-size: 11px;
+}
 .fw-10 {
     font-size: 10px;
 }
 .product {
-    -ms-flex: 201px;
-    flex: 0 0 201px;
+    -ms-flex: 211px;
+    flex: 0 0 211px;
 }
 .product .card .card-img-top {
-    height: 185px;
+    height: 195px;
     object-fit: contain;
 }
 hr.dashed{border: 1px dashed #000;}

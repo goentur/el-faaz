@@ -9,5 +9,8 @@
     "SatuanBarang": true,
     "Barang": true,
     "Penjualan": true,
-    "Ukuran": true
+    "Ukuran": true,
+    "Pembelian": true,
+    "Warna": true,
+    "Gudang": true
 }

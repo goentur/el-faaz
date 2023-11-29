@@ -23,19 +23,7 @@
                     @method('PUT')
                     @endisset
                     <div class="row mb-3">
-                        <div class="col-lg-3 mb-3">
-                            <label for="pemasok" class="form-label">Pemasok <span class="text-danger">*</span></label>
-                            <select required name="pemasok" id="pemasok" class="form-control">
-                                <option value="">Pilih salah satu</option>
-                                @foreach ($pemasoks as $pemasok)
-                                <option value="{{ $pemasok->id }}" {{ isset($data)&&$data->pemasok_id==$pemasok->id?' selected':''}}{{old('pemasok')==$pemasok->id?' selected':'' }}>{{ $pemasok->nama }}</option>
-                                @endforeach
-                            </select>
-                            @error('pemasok')
-                            <strong class="text-danger text-validation">{{ $message }}</strong>
-                            @enderror
-                        </div>
-                        <div class="col-lg-6 mb-3">
+                        <div class="col-lg-9 mb-3">
                             <label for="nama" class="form-label">Nama <span class="text-danger">*</span></label>
                             <input required type="text" class="form-control @error('nama')is-invalid @enderror" value="{{ isset($data)?$data->nama:old('nama') }}" id="nama" name="nama" placeholder="Masukan nama">
                             @error('nama')
@@ -45,74 +33,26 @@
                             @enderror
                         </div>
                         <div class="col-lg-3 mb-3">
-                            <label for="satuan" class="form-label">Satuan <span class="text-danger">*</span></label>
-                            <select required name="satuan" id="satuan" class="form-control">
+                            <label for="warna" class="form-label">Warna <span class="text-danger">*</span></label>
+                            <select required name="warna" id="warna" class="form-control">
                                 <option value="">Pilih salah satu</option>
-                                @foreach ($satuans as $satuan)
-                                <option value="{{ $satuan->id }}" {{ isset($data)&&$data->satuan_id==$satuan->id?' selected':''}}{{old('satuan')==$satuan->id?' selected':'' }}>{{ $satuan->nama }}</option>
+                                @foreach ($warnas as $warna)
+                                <option value="{{ $warna->id }}" {{ isset($data)&&$data->warna_id==$warna->id?' selected':''}}{{old('warna')==$warna->id?' selected':'' }}>{{ $warna->nama }}</option>
                                 @endforeach
                             </select>
-                            @error('satuan')
+                            @error('warna')
                             <strong class="text-danger text-validation">{{ $message }}</strong>
                             @enderror
                         </div>
-                        <div class="col-lg-3 mb-3">
-                            <label for="stok" class="form-label">Stok <span class="text-danger">*</span></label>
-                            <input required type="text" class="form-control @error('stok')is-invalid @enderror"{{ isset($data)?' disabled':'' }} value="{{ isset($data)?$data->stok:old('stok') }}" id="stok" name="stok" placeholder="Masukan stok" data-inputmask="'alias': 'numeric'">
-                            @error('stok')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                        <div class="col-lg-3 mb-3">
-                            <label for="hpp" class="form-label">HPP <span class="text-danger">*</span></label>
-                            <input required type="text" class="form-control @error('hpp')is-invalid @enderror" value="{{ isset($data)?$data->hpp:old('hpp') }}" id="hpp" name="hpp" placeholder="Masukan nominal hpp" data-inputmask="'alias': 'decimal', 'groupSeparator': ','">
-                            @error('hpp')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                        <div class="col-lg-3 mb-3">
-                            <label for="harga_jual" class="form-label">Harga Jual <span class="text-danger">*</span></label>
-                            <input required type="text" class="form-control @error('harga_jual')is-invalid @enderror" value="{{ isset($data)?$data->harga_jual:old('harga_jual') }}" id="harga_jual" name="harga_jual" placeholder="Masukan nominal harga jual" data-inputmask="'alias': 'decimal', 'groupSeparator': ','">
-                            @error('harga_jual')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                        <div class="col-lg-3 mb-3">
-                            <label for="harga_anggota" class="form-label">Harga Anggota <span class="text-danger">*</span></label>
-                            <input required type="text" class="form-control @error('harga_anggota')is-invalid @enderror" value="{{ isset($data)?$data->harga_anggota:old('harga_anggota') }}" id="harga_anggota" name="harga_anggota" placeholder="Masukan nominal harga anggota" data-inputmask="'alias': 'decimal', 'groupSeparator': ','">
-                            @error('harga_anggota')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                        <div class="col-lg-6">
-                            <label for="ukuran" class="form-label">Ukuran <span class="text-danger">*</span></label>
-                            <select required name="ukuran[]" id="ukuran" class="form-control" multiple>
-                                <option value="">Pilih lebih dari satu</option>
-                                @foreach ($ukurans as $ukuran)
-                                <option value="{{ $ukuran->id }}"{{in_array($ukuran->id, old("ukuran") ?: []) ? ' selected': ''}}{{ isset($data)&&$data->ukuran->contains($ukuran->id)? ' selected': '' }}>{{ $ukuran->nama }}</option>
-                                @endforeach
-                            </select>
-                            @error('ukuran')
-                            <strong class="text-danger text-validation">{{ $message }}</strong>
-                            @enderror
-                        </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <label for="file-manager" class="form-label">Foto <span class="text-danger">*</span></label>
                             <div class="input-group">
-                                <a id="file-manager" data-input="foto" data-preview="holder" class="btn btn-primary">
+                                <a href="javascript:void(0)" id="file-manager" data-input="foto" data-preview="holder" class="btn btn-primary">
                                     <i class="fa-solid fa-folder-open"></i> Pilih Foto
                                 </a>
-                                <input id="foto" class="form-control" type="text" readonly value="{{ isset($data)?$data->foto:old('foto') }}" name="foto">
+                                <input id="foto" class="form-control" required type="text" readonly value="{{ isset($data)?asset($data->foto):old('foto') }}" name="foto">
                                 @if (isset($data)&&$data->foto!==null)
-                                <a href="{{ $data->foto }}" class="btn btn-primary" target="popup" onclick="window.open('{{ $data->foto }}','{{ $data->nama }}','width=800,height=600')"><i class="fa-regular fa-image"></i> Lihat Foto</a>
+                                <a href="{{ asset($data->foto) }}" class="btn btn-primary" target="popup" onclick="window.open('{{ asset($data->foto) }}','{{ $data->nama }}','width=800,height=600')"><i class="fa-regular fa-image"></i> Lihat Foto</a>
                                 @endif
                             </div>
                             @error('foto')
@@ -129,12 +69,4 @@
 @endsection
 @push('js')
 <script src="{{ asset('vendor/laravel-filemanager/js/stand-alone-button.js') }}"></script>
-<script>
-    $('#file-manager').filemanager('image');
-    $(function() {
-        new Choices(document.querySelector("select#pemasok"));
-        new Choices(document.querySelector("select#satuan"));
-        new Choices(document.querySelector("select#ukuran"));
-    });
-</script>
-@endpush
+<script>$("#file-manager").filemanager("image"),$(function(){new Choices(document.querySelector("select#warna"))});</script>@endpush

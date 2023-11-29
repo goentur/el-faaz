@@ -26,7 +26,4 @@
 <script src="{{ asset('js/datatables.js') }}"></script>
 <script src="{{ asset('js/jquery-confirm.min.js') }}"></script>
 @endpush
-@push('js')
-{{ $dataTable->scripts() }}
-<script>$(document).on("click",".hapus",function(){var t=$(this).data("id");$.confirm({icon:"fa fa-warning",title:"PERINGATAN!",content:"Apakah anda yakin ingin menghapus data ini?",type:"red",autoClose:"tutup|5000",buttons:{ya:{text:"Ya",btnClass:"btn-red",action:function(){$.ajax({url:"{{ route($attribute['link'].'destroy',csrf_token()) }}",type:"POST",data:{_method:"DELETE",id:t},dataType:"JSON",success:function(t){t.status?(alertApp("success",t.message),$("#dataTableBuilder").DataTable().ajax.reload()):alertApp("error",t.message)},error:function(t,a,e){alertApp("error",e)}})}},tutup:{text:"Tutup"}}})});</script>
-@endpush
+@push('js'){{ $dataTable->scripts() }}<script>$(document).on("click",".hapus",function(){var t=$(this).data("id");$.confirm({icon:"fa fa-warning",title:"PERINGATAN!",content:"Apakah anda yakin ingin menghapus data ini?",type:"red",autoClose:"tutup|5000",buttons:{ya:{text:"Ya",btnClass:"btn-red",action:function(){$.ajax({url:"{{ route($attribute['link'].'destroy',csrf_token()) }}",type:"POST",data:{_method:"DELETE",id:t},dataType:"JSON",success:function(t){t.status?(alertApp("success",t.message),$("#dataTableBuilder").DataTable().ajax.reload()):alertApp("error",t.message)},error:function(t,a,e){alertApp("error",e)}})}},tutup:{text:"Tutup"}}})});</script>@endpush

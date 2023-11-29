@@ -33,7 +33,7 @@
         </a>
     </li>
     @endcan
-    @canany(['akun', 'anggota', 'pemasok','satuan barang','ukuran','barang'])
+    @canany(['akun', 'anggota', 'pemasok', 'warna', 'satuan barang', 'ukuran', 'barang'])
     <li class="sidebar-header">
         Master Data
     </li>
@@ -55,6 +55,13 @@
     <li class="sidebar-item{{ request()->is('pemasok*') ? ' active' : '' }}">
         <a class="sidebar-link" href="{{ route('pemasok.index') }}">
             <i class="align-middle" data-feather="truck"></i> <span class="align-middle">Pemasok</span>
+        </a>
+    </li>
+    @endcan
+    @can('warna')
+    <li class="sidebar-item{{ request()->is('warna*') ? ' active' : '' }}">
+        <a class="sidebar-link" href="{{ route('warna.index') }}">
+            <i class="align-middle" data-feather="aperture"></i> <span class="align-middle">Warna</span>
         </a>
     </li>
     @endcan
@@ -80,10 +87,24 @@
     </li>
     @endcan
     @endcanany
-    @canany(['penjualan'])
+    @canany(['gudang','penjualan','pembelian'])
     <li class="sidebar-header">
         Transaksi
     </li>
+    @can('gudang')
+    <li class="sidebar-item{{ request()->is('gudang*') ? ' active' : '' }}">
+        <a class="sidebar-link" href="{{ route('gudang.index') }}">
+            <i class="align-middle" data-feather="package"></i> <span class="align-middle">Gudang</span>
+        </a>
+    </li>
+    @endcan
+    @can('pembelian')
+    <li class="sidebar-item{{ request()->is('pembelian*') ? ' active' : '' }}">
+        <a class="sidebar-link" href="{{ route('pembelian.index') }}">
+            <i class="align-middle" data-feather="shopping-cart"></i> <span class="align-middle">Pembelian</span>
+        </a>
+    </li>
+    @endcan
     @can('penjualan')
     <li class="sidebar-item{{ request()->is('penjualan*') ? ' active' : '' }}">
         <a class="sidebar-link" href="{{ route('penjualan.index') }}">

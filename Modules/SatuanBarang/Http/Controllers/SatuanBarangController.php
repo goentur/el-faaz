@@ -3,7 +3,6 @@
 namespace Modules\SatuanBarang\Http\Controllers;
 
 use App\Models\Satuan;
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Yajra\DataTables\Facades\DataTables;

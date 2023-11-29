@@ -10,16 +10,8 @@ class Barang extends Model
 {
     use HasFactory, SoftDeletes;
     protected $guarded = ['id'];
-    public function pemasok()
+    public function warna()
     {
-        return $this->belongsTo(Pemasok::class);
-    }
-    public function satuan()
-    {
-        return $this->belongsTo(Satuan::class);
-    }
-    public function ukuran()
-    {
-        return $this->belongsToMany(Ukuran::class, BarangUkuran::class);
+        return $this->belongsTo(Warna::class);
     }
 }

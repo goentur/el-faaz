@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignIdFor(Pemasok::class)->constrained()->cascadeOnDelete();
             $table->bigInteger('tanggal');
             $table->bigInteger('total');
+            $table->text('keterangan');
             $table->tinyInteger('status')->comment('1 = belum, 2 = sudah, 3 = masukan ke jurnal');
             $table->timestamps();
         });

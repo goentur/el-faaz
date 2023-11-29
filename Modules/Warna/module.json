@@ -1,0 +1,11 @@
+{
+    "name": "Warna",
+    "alias": "warna",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Warna\\app\\Providers\\WarnaServiceProvider"
+    ],
+    "files": []
+}
