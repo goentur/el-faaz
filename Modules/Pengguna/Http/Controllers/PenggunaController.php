@@ -3,6 +3,7 @@
 namespace Modules\Pengguna\Http\Controllers;
 
 use App\Models\User;
+use App\Models\ZonaWaktu;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -22,8 +23,11 @@ class PenggunaController extends Controller
     public function index(Request $request, Builder $builder)
     {
         if ($request->ajax()) {
-            return DataTables::eloquent(User::with('roles')->select('id', 'name', 'email'))
+            return DataTables::eloquent(User::with('roles', 'zonaWaktu')->select('id', 'zona_waktu_id', 'name', 'email', 'kode_printer'))
                 ->addIndexColumn()
+                ->editColumn('zonaWaktu.nama', function (User $data) {
+                    return $data->zonaWaktu ? $data->zonaWaktu->nama : view('errors.master-data');
+                })
                 ->editColumn('id', function (User $data) {
                     return $data->getRoleNames()[0];
                 })
@@ -41,7 +45,9 @@ class PenggunaController extends Controller
             ->addIndex(['class' => 'w-1 text-center', 'data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => 'NO'])
             ->addColumn(['class' => 'w-1', 'data' => 'email', 'name' => 'email', 'title' => 'EMAIL'])
             ->addColumn(['data' => 'name', 'name' => 'name', 'title' => 'NAMA'])
-            ->addColumn(['class' => 'w-2', 'data' => 'id', 'name' => 'id', 'title' => 'PERAN PENGGUNA'])
+            ->addColumn(['class' => 'w-3', 'data' => 'id', 'name' => 'id', 'title' => 'PERAN PENGGUNA'])
+            ->addColumn(['class' => 'w-10 top', 'data' => 'zonaWaktu.nama', 'name' => 'zonaWaktu.nama', 'title' => 'ZONA WAKTU'])
+            ->addColumn(['class' => 'w-5', 'data' => 'kode_printer', 'name' => 'kode_printer', 'title' => 'KODE PRINTER'])
             ->addColumn(['class' => 'w-1', 'data' => 'aksi', 'name' => 'aksi', 'title' => 'AKSI'])
             ->parameters([
                 'ordering' => false,
@@ -64,6 +70,7 @@ class PenggunaController extends Controller
         $data = [
             'attribute' => $this->attribute,
             'roles' => Role::select('id', 'name')->whereNotIn('name', ['developer'])->get(),
+            'zonaWaktus' => ZonaWaktu::select('id', 'nama')->get(),
         ];
         return view($this->attribute['view'] . 'form', $data);
     }
@@ -72,14 +79,18 @@ class PenggunaController extends Controller
     {
         $request->validate([
             'peran' => 'required|string',
+            'zona_waktu' => 'required|numeric',
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|confirmed|string|max:255|min:8',
+            'kode_printer' => 'required|numeric',
         ]);
         $user = User::create([
+            'zona_waktu_id' => $request->zona_waktu,
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'kode_printer' => $request->kode_printer,
         ]);
         $user->assignRole($request->peran);
         return redirect()->route($this->attribute['link'] . 'index')->with(['success' => 'Data berhasil disimpan']);
@@ -94,8 +105,9 @@ class PenggunaController extends Controller
     {
         $kirim = [
             'attribute' => $this->attribute,
-            'data' => User::with('roles')->select('id', 'name', 'email')->find(dekrip($id)),
+            'data' => User::with('roles')->select('id', 'zona_waktu_id', 'name', 'email', 'kode_printer')->find(dekrip($id)),
             'roles' => Role::select('id', 'name')->whereNotIn('name', ['developer'])->get(),
+            'zonaWaktus' => ZonaWaktu::select('id', 'nama')->get(),
         ];
         return view($this->attribute['view'] . 'form', $kirim);
     }
@@ -104,11 +116,15 @@ class PenggunaController extends Controller
     {
         $request->validate([
             'peran' => 'required|string',
+            'zona_waktu' => 'required|numeric',
             'name' => 'required|string|max:255',
+            'kode_printer' => 'required|numeric',
         ]);
         $user = User::select('id')->find(dekrip($id));
         $user->update([
+            'zona_waktu_id' => $request->zona_waktu,
             'name' => $request->name,
+            'kode_printer' => $request->kode_printer,
         ]);
         $user->syncRoles($request->peran);
         return redirect()->route($this->attribute['link'] . 'index')->with(['success' => 'Data berhasil diubah']);

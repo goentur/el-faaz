@@ -3,10 +3,8 @@
 namespace Modules\Barang\Http\Controllers;
 
 use App\Models\Barang;
-use App\Models\Warna;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Str;
 use Yajra\DataTables\Facades\DataTables;
 use Yajra\DataTables\Html\Builder;
 
@@ -22,16 +20,8 @@ class BarangController extends Controller
     public function index(Request $request, Builder $builder)
     {
         if ($request->ajax()) {
-            return DataTables::eloquent(Barang::with('warna')->select('id', 'warna_id', 'nama', 'foto')->orderBy('id', 'desc'))
+            return DataTables::eloquent(Barang::select('id', 'nama')->orderBy('id', 'DESC'))
                 ->addIndexColumn()
-                ->editColumn('warna.nama', function (Barang $data) {
-                    return $data->warna ? $data->warna->nama : view('errors.master-data');
-                })
-                ->editColumn('foto', function (Barang $data) {
-                    return view($this->attribute['view'] . 'foto', [
-                        'data' => $data,
-                    ]);
-                })
                 ->addColumn('aksi', function (Barang $data) {
                     $kirim = [
                         'data' => $data,
@@ -42,9 +32,7 @@ class BarangController extends Controller
         }
         $dataTable = $builder
             ->addIndex(['class' => 'w-1 text-center top', 'data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => 'NO'])
-            ->addColumn(['class' => 'w-10 text-center', 'data' => 'foto', 'name' => 'foto', 'title' => 'FOTO'])
             ->addColumn(['class' => 'top', 'data' => 'nama', 'name' => 'nama', 'title' => 'NAMA'])
-            ->addColumn(['class' => 'w-10 top', 'data' => 'warna.nama', 'name' => 'warna.nama', 'title' => 'WARNA'])
             ->addColumn(['class' => 'w-1 top', 'data' => 'aksi', 'name' => 'aksi', 'title' => 'AKSI'])
             ->parameters([
                 'ordering' => false,
@@ -66,7 +54,6 @@ class BarangController extends Controller
     {
         $data = [
             'attribute' => $this->attribute,
-            'warnas' => Warna::select('id', 'nama')->get(),
         ];
         return view($this->attribute['view'] . 'form', $data);
     }
@@ -74,14 +61,10 @@ class BarangController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'warna' => 'required|numeric',
             'nama' => 'required|string|max:255',
-            'foto' => 'required|string',
         ]);
         Barang::create([
-            'warna_id' => $request->warna,
             'nama' => $request->nama,
-            'foto' => Str::after($request->foto, url('')),
         ]);
         return redirect()->route($this->attribute['link'] . 'index')->with(['success' => 'Data berhasil disimpan']);
     }
@@ -95,8 +78,7 @@ class BarangController extends Controller
     {
         $kirim = [
             'attribute' => $this->attribute,
-            'data' => Barang::with('warna')->select('id', 'warna_id', 'nama', 'foto')->find(dekrip($id)),
-            'warnas' => Warna::select('id', 'nama')->get(),
+            'data' => Barang::select('id', 'nama')->find(dekrip($id)),
         ];
         return view($this->attribute['view'] . 'form', $kirim);
     }
@@ -104,14 +86,10 @@ class BarangController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'warna' => 'required|numeric',
             'nama' => 'required|string|max:255',
-            'foto' => 'required|string',
         ]);
         Barang::select('id')->find(dekrip($id))->update([
-            'ukuran_id' => $request->ukuran,
             'nama' => $request->nama,
-            'foto' => $request->foto,
         ]);
         return redirect()->route($this->attribute['link'] . 'index')->with(['success' => 'Data berhasil diubah']);
     }
@@ -132,16 +110,8 @@ class BarangController extends Controller
     public function sampah(Request $request, Builder $builder)
     {
         if ($request->ajax()) {
-            return DataTables::eloquent(Barang::onlyTrashed()->with('warna')->select('id', 'warna_id', 'nama', 'foto')->orderBy('id', 'desc'))
+            return DataTables::eloquent(Barang::onlyTrashed()->select('id', 'nama')->orderBy('id', 'DESC'))
                 ->addIndexColumn()
-                ->editColumn('warna.nama', function (Barang $data) {
-                    return $data->warna ? $data->warna->nama : view('errors.master-data');
-                })
-                ->editColumn('foto', function (Barang $data) {
-                    return view($this->attribute['view'] . 'foto', [
-                        'data' => $data,
-                    ]);
-                })
                 ->addColumn('aksi', function (Barang $data) {
                     $kirim = [
                         'data' => $data,
@@ -152,9 +122,7 @@ class BarangController extends Controller
         }
         $dataTable = $builder
             ->addIndex(['class' => 'w-1 text-center top', 'data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => 'NO'])
-            ->addColumn(['class' => 'w-10 text-center', 'data' => 'foto', 'name' => 'foto', 'title' => 'FOTO'])
             ->addColumn(['class' => 'top', 'data' => 'nama', 'name' => 'nama', 'title' => 'NAMA'])
-            ->addColumn(['class' => 'w-10 top', 'data' => 'warna.nama', 'name' => 'warna.nama', 'title' => 'WARNA'])
             ->addColumn(['class' => 'w-1 top', 'data' => 'aksi', 'name' => 'aksi', 'title' => 'AKSI'])
             ->parameters([
                 'ordering' => false,

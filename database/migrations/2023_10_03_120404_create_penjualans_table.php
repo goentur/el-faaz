@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Anggota;
+use App\Models\MetodePembayaran;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('penjualans', function (Blueprint $table) {
             $table->unsignedBigInteger('id')->primary();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(MetodePembayaran::class)->constrained()->cascadeOnDelete();
             $table->unsignedBigInteger('anggota_id')->nullable();
             $table->string('nama_pembeli');
             $table->bigInteger('tanggal');

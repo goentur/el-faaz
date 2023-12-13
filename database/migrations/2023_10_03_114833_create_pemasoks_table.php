@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('pemasoks', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
+            $table->tinyInteger('status')->comment('1 = tidak ada hutang, 2  = ada hutang');
             $table->softDeletes();
             $table->timestamps();
         });

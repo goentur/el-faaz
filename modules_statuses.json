@@ -12,5 +12,10 @@
     "Ukuran": true,
     "Pembelian": true,
     "Warna": true,
-    "Gudang": true
+    "Gudang": true,
+    "ZonaWaktu": true,
+    "MetodePembayaran": true,
+    "Angsuran": true,
+    "Dagangan": true,
+    "Riwayat": true
 }

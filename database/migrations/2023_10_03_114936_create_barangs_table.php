@@ -14,9 +14,7 @@ return new class extends Migration
     {
         Schema::create('barangs', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Warna::class)->constrained()->cascadeOnDelete();
             $table->string('nama');
-            $table->text('foto')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

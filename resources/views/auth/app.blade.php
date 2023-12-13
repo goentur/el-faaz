@@ -19,7 +19,7 @@
                                    <div class="card-body">
                                         <div class="m-sm-4">
                                              <div class="text-center">
-                                                  <img src="{{ asset('img/icons/logo.png') }}" alt="Logo app" class="img-fluid" width="132" />
+                                                  <img src="{{ asset('img/icons/logo.png') }}" alt="Logo app" height="100px" />
                                              </div>
                                              @yield('content')
                                         </div>

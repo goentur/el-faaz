@@ -1,0 +1,31 @@
+{
+    "name": "nwidart/metodepembayaran",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\MetodePembayaran\\": "",
+            "Modules\\MetodePembayaran\\App\\": "app/",
+            "Modules\\MetodePembayaran\\Database\\Factories\\": "database/factories/",
+            "Modules\\MetodePembayaran\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\MetodePembayaran\\Tests\\": "tests/"
+        }
+    }
+}

@@ -22,3 +22,7 @@ Route::middleware('auth', 'can:pemasok')->group(function () {
     });
     Route::resource('pemasok', PemasokController::class);
 });
+
+Route::middleware('auth')->group(function () {
+    Route::post('pemasok/data', [PemasokController::class, 'dataPemasok'])->name('pemasok.data');
+});

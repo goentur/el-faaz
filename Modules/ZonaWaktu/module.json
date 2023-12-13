@@ -1,0 +1,11 @@
+{
+    "name": "ZonaWaktu",
+    "alias": "zonawaktu",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\ZonaWaktu\\app\\Providers\\ZonaWaktuServiceProvider"
+    ],
+    "files": []
+}

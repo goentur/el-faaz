@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Anggota\Http\Controllers\AnggotaController;
+use Modules\Anggota\app\Http\Controllers\AnggotaController;
+use Modules\Anggota\app\Http\Controllers\AnggotaDetailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,10 +16,14 @@ use Modules\Anggota\Http\Controllers\AnggotaController;
 */
 
 Route::middleware('auth', 'can:anggota')->group(function () {
-    Route::middleware('role:developer')->group(function () {
-        Route::get('anggota/sampah', [AnggotaController::class, 'sampah'])->name('anggota.sampah');
-        Route::post('anggota/memulihkan', [AnggotaController::class, 'memulihkan'])->name('anggota.memulihkan');
-        Route::post('anggota/permanen', [AnggotaController::class, 'permanen'])->name('anggota.permanen');
+    Route::middleware('role:developer')->prefix('anggota')->group(function () {
+        Route::get('sampah', [AnggotaController::class, 'sampah'])->name('anggota.sampah');
+        Route::post('memulihkan', [AnggotaController::class, 'memulihkan'])->name('anggota.memulihkan');
+        Route::post('permanen', [AnggotaController::class, 'permanen'])->name('anggota.permanen');
+    });
+    Route::prefix('anggota/detail')->group(function () {
+        Route::post('daftar-barang', [AnggotaDetailController::class, 'index'])->name('anggota.detail.daftar-barang');
+        Route::get('cetak-tagihan/{id}', [AnggotaDetailController::class, 'cetakTagihan'])->name('anggota.detail.cetak-tagihan');
     });
     Route::resource('anggota', AnggotaController::class);
 });

@@ -45,3 +45,7 @@ function fileName()
           time();
      return $kode;
 }
+function zonaWaktuPenguna()
+{
+    return auth()->user()->zonaWaktu;
+}

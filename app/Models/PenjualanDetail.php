@@ -9,5 +9,13 @@ class PenjualanDetail extends Model
 {
     use HasFactory;
     public $incrementing = false;
-    protected $fillable = ['id', 'penjualan_id', 'barang_id', 'kuantitas', 'harga', 'status'];
+    protected $fillable = ['id', 'penjualan_id', 'pemasok_barang_detail_id', 'tanggal', 'kuantitas', 'harga', 'status'];
+    public function penjualan()
+    {
+        return $this->belongsTo(Penjualan::class)->with('user');
+    }
+    public function pemasokBarangDetail()
+    {
+        return $this->belongsTo(PemasokBarangDetail::class)->with('barangDetail', 'pemasok');
+    }
 }

@@ -1,0 +1,11 @@
+{
+    "name": "Angsuran",
+    "alias": "angsuran",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Angsuran\\app\\Providers\\AngsuranServiceProvider"
+    ],
+    "files": []
+}

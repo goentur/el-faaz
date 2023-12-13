@@ -1,0 +1,11 @@
+{
+    "name": "Dagangan",
+    "alias": "dagangan",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Dagangan\\app\\Providers\\DaganganServiceProvider"
+    ],
+    "files": []
+}

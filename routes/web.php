@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -22,5 +23,25 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::middleware('auth')->group(function () {
+    Route::get(
+        '/enable-maintenance-mode',
+        function () {
+            Artisan::call('down', [
+                '--secret' => 'allow-certain-users-to-access-the-application-using-this-secret',
+            ]);
+        }
+    );
+    Route::get(
+        '/disable-maintenance-mode',
+        function () {
+            Artisan::call('up');
+        }
+    );
+    Route::get(
+        '/optimize-clear',
+        function () {
+            Artisan::call('optimize:clear');
+        }
+    );
     Route::get('home', [HomeController::class, 'index'])->name('home.index');
 });

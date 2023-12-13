@@ -11,7 +11,7 @@ function alertApp(t,m) {
           message: m,
           position: {
                x: 'left',
-               y: 'bottom',
+               y: 'top',
           },
      })
 }

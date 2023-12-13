@@ -1,0 +1,11 @@
+{
+    "name": "MetodePembayaran",
+    "alias": "metodepembayaran",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\MetodePembayaran\\app\\Providers\\MetodePembayaranServiceProvider"
+    ],
+    "files": []
+}

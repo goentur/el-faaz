@@ -3,8 +3,9 @@
 namespace Modules\Pembelian\app\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Barang;
-use App\Models\BarangDetail;
+use App\Models\Angsuran;
+use App\Models\Pemasok;
+use App\Models\PemasokBarangDetail;
 use App\Models\Pembelian;
 use App\Models\PembelianDetail;
 use Illuminate\Http\JsonResponse;
@@ -25,172 +26,148 @@ class PembelianController extends Controller
     {
         $data = [
             'attribute' => $this->attribute,
+            'pemasoks' => Pemasok::select('id', 'nama')->where(['status' => 1])->get(),
         ];
         return view($this->attribute['view'] . 'index', $data);
     }
     public function dataBarang(Request $request): JsonResponse
     {
+        $request->validate([
+            'pemasok' => 'required|string',
+        ]);
         if ($request->ajax()) {
-            $limit = 16;
-            if (auth()->user()->sidebar === 'h') {
-                $limit = 20;
-            }
-            if ($request->nama) {
-                $request->validate([
-                    'nama' => 'required|string',
-                ]);
-                $barangDetails = BarangDetail::with('pemasok', 'barang', 'satuan', 'ukuran')->select('id', 'pemasok_id', 'barang_id', 'satuan_id', 'stok', 'harga_beli')->orderBy('stok', 'ASC')->orderBy('id', 'desc')->whereHas('barang', function ($query) use ($request) {
-                    $query->where('nama', 'like', '%' . $request->nama . '%');
-                    $query->where('deleted_at', null);
-                })->limit($limit);
-            } else {
-                $barangDetails = BarangDetail::with('pemasok', 'barang', 'satuan', 'ukuran')->select('id', 'pemasok_id', 'barang_id', 'satuan_id', 'stok', 'harga_beli')->orderBy('stok', 'ASC')->orderBy('id', 'desc')->whereHas('barang', function ($query) {
-                    $query->where('deleted_at', null);
-                })->limit($limit);
-            }
-            if ($barangDetails->count() > 0) {
-                $fullData = [];
-                foreach ($barangDetails->get() as $barangDetail) {
-                    $ukuran = "";
-                    foreach ($barangDetail->ukuran as $u) {
-                        if ($u === $barangDetail->ukuran->last()) {
-                            $ukuran .= $u->nama;
-                        } else {
-                            $ukuran .= $u->nama . ", ";
-                        }
-                    }
-                    $barang = "";
-                    $foto = asset('img/product/emty.png');
-                    if ($barangDetail->barang) {
-                        $barang = $barangDetail->barang->nama;
-                        $foto = $barangDetail->barang->foto;
-                        if ($barangDetail->barang->warna) {
-                            $barang .= ' - ' . $barangDetail->barang->warna->nama;
-                        }
-                    }
-                    $fullData[] = [
-                        'id' => enkrip($barangDetail->id),
-                        'pemasok' => $barangDetail->pemasok ? $barangDetail->pemasok->nama : '',
-                        'satuan' => $barangDetail->satuan ? $barangDetail->satuan->nama : '',
-                        'nama' => $barang,
-                        'stok' => $barangDetail->stok,
-                        'harga' => rupiah($barangDetail->harga_beli),
-                        'ukuran' => $ukuran,
-                        'foto' => $foto,
-                    ];
+            $idPemasok = dekrip($request->pemasok);
+            $pemasok = Pemasok::select('id')->where(['id' => $idPemasok]);
+            if ($pemasok->count() > 0) {
+                $limit = 16;
+                if (auth()->user()->sidebar === 'h') {
+                    $limit = 20;
                 }
-                return response()->json($fullData, 200);
+                if ($request->nama) {
+                    $request->validate([
+                        'nama' => 'required|string',
+                    ]);
+                    $pemasokBarangDetail = PemasokBarangDetail::with('pemasok', 'barangDetail')->select('id', 'pemasok_id', 'barang_detail_id', 'stok', 'harga_beli')->where('pemasok_id', $idPemasok)->orderBy('stok', 'ASC')->orderBy('id', 'desc')->whereHas('barangDetail', function ($query) use ($request) {
+                        $query->whereHas('barang', function ($q) use ($request) {
+                            $q->where('nama', 'like', '%' . $request->nama . '%');
+                        });
+                    })->limit($limit);
+                } else {
+                    $pemasokBarangDetail = PemasokBarangDetail::with('pemasok', 'barangDetail')->select('id', 'pemasok_id', 'barang_detail_id', 'stok', 'harga_beli')->where('pemasok_id', $idPemasok)->orderBy('stok', 'ASC')->orderBy('id', 'desc')->limit($limit);
+                }
+                if ($pemasokBarangDetail->count() > 0) {
+                    $fullData = [];
+                    foreach ($pemasokBarangDetail->get() as $pbd) {
+                        if ($pbd->barangDetail) {
+                            $barang = '';
+                            if ($pbd->barangDetail->barang) {
+                                $barang = $pbd->barangDetail->barang->nama;
+                            }
+                            $warna = '';
+                            if ($pbd->barangDetail->warna) {
+                                $warna = ' - ' . $pbd->barangDetail->warna->nama;
+                            }
+                            $satuan = '';
+                            if ($pbd->barangDetail->satuan) {
+                                $satuan = $pbd->barangDetail->satuan->nama;
+                            }
+                            $ukuran = '';
+                            if ($pbd->barangDetail->ukuran) {
+                                $ukuran = '';
+                                foreach ($pbd->barangDetail->ukuran as $u) {
+                                    if ($u === $pbd->barangDetail->ukuran->last()) {
+                                        $ukuran .= $u->nama;
+                                    } else {
+                                        $ukuran .= $u->nama . ", ";
+                                    }
+                                }
+                            }
+                            $foto = asset('img/product/emty.png');
+                            if ($pbd->barangDetail->foto) {
+                                $foto = $pbd->barangDetail->foto;
+                            }
+                            $fullData[] = [
+                                'id' => enkrip($pbd->id),
+                                'pemasok' => $pbd->pemasok ? $pbd->pemasok->nama : '',
+                                'satuan' => $satuan,
+                                'nama' => $barang . '' . $warna,
+                                'stok' => $pbd->stok,
+                                'harga' => rupiah($pbd->harga_beli),
+                                'ukuran' => $ukuran,
+                                'foto' => $foto,
+                            ];
+                        }
+                    }
+                    return response()->json($fullData, 200);
+                } else {
+                    return response()->json('Barang tidak ditemukan', 404);
+                }
             } else {
-                return response()->json('Barang tidak ditemukan', 404);
+                return response()->json('Pemasok tidak ditemukan', 404);
             }
         }
     }
     public function selesai(Request $request): JsonResponse
     {
         $request->validate([
+            'pemasok' => 'required|string',
             'barang' => 'required|array|min:1',
             'barang.*.hargaBarang' => 'required|string',
             'barang.*.id' => 'required|string',
             'barang.*.kuantitas' => 'required|numeric',
             'barang.*.namaBarang' => 'required|string',
             'total' => 'required|numeric',
-            'bayar' => 'required|string',
             'keterangan' => 'required|string',
         ]);
         if ($request->ajax()) {
+            $user = auth()->user()->id;
             $tanggal = time();
             $idPembelian = id();
-            $idAnggota = null;
-            $jenisPembelian = 1;
+            $idAngsuran = id();
+            $idPemasok = dekrip($request->pemasok);
             $statusPembelian = 1;
-            $bayar = str_replace(",", "", $request->bayar);
-            if ($request->id !== "biasa") {
-                $jenisPembelian = 2;
-                $idAnggota = dekrip($request->id);
-            }
-            if ($bayar >= $request->total) {
-                $statusPembelian = 2;
-            }
             try {
                 DB::beginTransaction();
-                // Pembelian
-                $Pembelian = Pembelian::create([
+                // Create Pembelian
+                Pembelian::create([
                     'id' => $idPembelian,
-                    'user_id' => auth()->user()->id,
-                    'anggota_id' => $idAnggota,
-                    'nama_pembeli' => $request->nama,
+                    'user_id' => $user,
+                    'pemasok_id' => $idPemasok,
                     'tanggal' => $tanggal,
-                    'bayar' => $bayar,
                     'total' => $request->total,
-                    'jenis' => $jenisPembelian,
+                    'keterangan' => $request->keterangan,
                     'status' => $statusPembelian,
                 ]);
-                $barangs = "";
-                $barangPo = false;
-                foreach ($dataKeranjang as $data) {
-                    $harga = 0;
-                    if ($request->id === "biasa") {
-                        $harga = $data['harga_jual'];
-                    } else {
-                        $harga = $data['harga_anggota'];
-                    }
-                    $statusBarang = "";
-                    if ($data['status'] === 'po') {
-                        $statusBarang = "(PO) ";
-                        $barangPo = true;
-                    } else {
-                        $barang = Barang::select('id', 'stok')->find($data['id']);
-                        $barang->update([
-                            'stok' => $barang->stok - $data['kuantitas'],
-                        ]);
-                    }
-                    $barangs .= $statusBarang . "{$data['nama']}\n" . rupiah($harga) . " X {$data['kuantitas']} : " . rupiah($harga * $data['kuantitas']) . "\n";
+
+                foreach ($request->barang as $data) {
+                    $idBarang = dekrip($data['id']);
+                    $hargaBarang = str_replace(",", "", $data['hargaBarang']);
                     PembelianDetail::create([
                         'id' => id(),
-                        'Pembelian_id' => $idPembelian,
-                        'barang_id' => $data['id'],
+                        'pembelian_id' => $idPembelian,
+                        'pemasok_barang_detail_id' => $idBarang,
+                        'tanggal' => $tanggal,
                         'kuantitas' => $data['kuantitas'],
-                        'harga' => $harga,
-                        'status' => $data['status'] === 'siap' ? 2 : 1,
+                        'harga' => $hargaBarang,
+                    ]);
+                    $pemasokBarangDetail = PemasokBarangDetail::select('id', 'stok')->find($idBarang);
+                    $pemasokBarangDetail->update([
+                        'stok' => $pemasokBarangDetail->stok + $data['kuantitas'],
+                        'harga_beli' => $hargaBarang,
                     ]);
                 }
-                if ($barangPo) {
-                    $Pembelian->update([
-                        'status' => 1,
-                    ]);
-                }
-
+                Pemasok::select('id')->find($idPemasok)->update([
+                    'status' => 2,
+                ]);
                 // ANGSURAN
-                if ($bayar < $request->total) {
-                    $idAngsuran = id();
-                    Angsuran::create([
-                        'id' => $idAngsuran,
-                        'transaksi_id' => $idPembelian,
-                        'jenis' => 2,
-                        'status' => 1,
-                    ]);
-                    if ($bayar > 0 && $bayar < $request->total) {
-                        AngsuranDetail::create([
-                            'id' => id(),
-                            'user_id' => auth()->user()->id,
-                            'angsuran_id' => $idAngsuran,
-                            'tanggal' => $tanggal,
-                            'nominal' => $bayar,
-                        ]);
-                    }
-                }
+                Angsuran::create([
+                    'id' => $idAngsuran,
+                    'transaksi_id' => $idPembelian,
+                    'jenis' => 1,
+                    'status' => 1,
+                ]);
                 DB::commit();
-                session()->forget('keranjang-Pembelian');
                 return response()->json([
-                    'data' => [
-                        'id' => $idPembelian,
-                        'total' => rupiah($request->total),
-                        'bayar' => rupiah($bayar),
-                        'kembalian' => $bayar <= $request->total ? 0 : rupiah($bayar - $request->total),
-                        // 25200 GMT + 07:00 (WIB)
-                        'tgl' => date('Y-m-d H:i:s', ($tanggal + 25200)),
-                        'barang' => $barangs,
-                    ],
                     'status' => true,
                     'message' => 'Transaksi Pembelian telah selesai',
                 ]);

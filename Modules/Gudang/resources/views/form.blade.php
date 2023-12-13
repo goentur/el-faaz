@@ -36,38 +36,11 @@
                             @enderror
                         </div>
                         <div class="col-lg-9 mb-3">
-                            <label for="barang" class="form-label">Barang <span class="text-danger">*</span></label>
+                            <label for="barang" class="form-label">Barang<span class="text-danger">*</span></label>
                             <select required name="barang" id="barang" class="form-control">
                                 <option value="">Pilih salah satu</option>
-                                @foreach ($barangs as $barang)
-                                <option value="{{ $barang->id }}" {{ isset($data)&&$data->barang_id==$barang->id?' selected':''}}{{old('barang')==$barang->id?' selected':'' }}>{{ $barang->nama }} - {{ $barang->warna?$barang->warna->nama:'WARNA TIDAK ADA' }}</option>
-                                @endforeach
                             </select>
                             @error('barang')
-                            <strong class="text-danger text-validation">{{ $message }}</strong>
-                            @enderror
-                        </div>
-                        <div class="col-lg-6">
-                            <label for="satuan" class="form-label">Satuan <span class="text-danger">*</span></label>
-                            <select required name="satuan" id="satuan" class="form-control">
-                                <option value="">Pilih salah satu</option>
-                                @foreach ($satuans as $satuan)
-                                <option value="{{ $satuan->id }}" {{ isset($data)&&$data->satuan_id==$satuan->id?' selected':''}}{{old('satuan')==$satuan->id?' selected':'' }}>{{ $satuan->nama }}</option>
-                                @endforeach
-                            </select>
-                            @error('satuan')
-                            <strong class="text-danger text-validation">{{ $message }}</strong>
-                            @enderror
-                        </div>
-                        <div class="col-lg-6">
-                            <label for="ukuran" class="form-label">Ukuran <span class="text-danger">*</span></label>
-                            <select required name="ukuran[]" id="ukuran" class="form-control" multiple>
-                                <option value="">Pilih lebih dari satu</option>
-                                @foreach ($ukurans as $ukuran)
-                                <option value="{{ $ukuran->id }}"{{in_array($ukuran->id, old("ukuran") ?: []) ? ' selected': ''}}{{ isset($data)&&$data->ukuran->contains($ukuran->id)? ' selected': '' }}>{{ $ukuran->nama }}</option>
-                                @endforeach
-                            </select>
-                            @error('ukuran')
                             <strong class="text-danger text-validation">{{ $message }}</strong>
                             @enderror
                         </div>
@@ -79,4 +52,4 @@
     </div>
 </div>
 @endsection
-@push('js')<script>$("#file-manager").filemanager("image"),$(function(){new Choices(document.querySelector("select#pemasok")),new Choices(document.querySelector("select#barang")),new Choices(document.querySelector("select#satuan")),new Choices(document.querySelector("select#ukuran"))});</script>@endpush
+@push('js')<script>$(function(){new Choices(document.querySelector("select#pemasok"));var e=new Choices("select#barang",{placeholder:!0,placeholderValue:"Pilih salah satu",searchPlaceholderValue:"Masukan nama barang, minimal 3 huruf",noChoicesText:"Tidak ada pilihan",itemSelectText:"Tekan untuk memilih",noResultsText:"Tidak ada pilihan",searchResultLimit:10,removeItems:!0});e.passedElement.element.addEventListener("search",function(a){a.detail.value.length>2&&a.detail.value.length%2&&$.ajax({url:"{{ route('dagangan.data') }}",type:"POST",data:{nama:a.detail.value},dataType:"JSON",success:function(a){e.clearChoices(),e.setChoices(a)},error:function(e,a,t){alertApp("error","Barang Dagangan tidak ditemukan")}})})});</script>@endpush

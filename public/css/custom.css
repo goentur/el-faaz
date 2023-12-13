@@ -63,6 +63,9 @@ select[disabled] {
 .text-validation{
   font-size: 12px;
 }
+.fw-50 {
+    font-size: 50px;
+}
 .fw-12 {
     font-size: 12px;
 }

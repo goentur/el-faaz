@@ -5,7 +5,7 @@
     "keywords": [],
     "priority": 0,
     "providers": [
-        "Modules\\Anggota\\Providers\\AnggotaServiceProvider"
+        "Modules\\Anggota\\app\\Providers\\AnggotaServiceProvider"
     ],
     "files": []
 }

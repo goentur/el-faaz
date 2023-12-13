@@ -15,32 +15,75 @@
             <i class="align-middle" data-feather="package"></i> <span class="align-middle">Fitur Aplikasi</span>
         </a>
     </li>
+    <li class="sidebar-item{{ request()->is('zona-waktu*') ? ' active' : '' }}">
+        <a class="sidebar-link" href="{{ route('zona-waktu.index') }}">
+            <i class="align-middle" data-feather="clock"></i> <span class="align-middle">Zona Waktu</span>
+        </a>
+    </li>
     @endrole
-    @can('pengguna')
+    @canany(['gudang','penjualan','pembelian','angsuran','riwayat'])
     <li class="sidebar-header">
-        Pengguna
+        Transaksi
     </li>
-    @can('peran pengguna')
-    <li class="sidebar-item{{ request()->is('peran-pengguna*') ? ' active' : '' }}">
-        <a class="sidebar-link" href="{{ route('peran-pengguna.index') }}">
-            <i class="align-middle" data-feather="user-check"></i> <span class="align-middle">Peran Pengguna</span>
+    @can('gudang')
+    <li class="sidebar-item{{ request()->is('gudang*') ? ' active' : '' }}">
+        <a class="sidebar-link" href="{{ route('gudang.index') }}">
+            <i class="align-middle" data-feather="package"></i> <span class="align-middle">Gudang</span>
         </a>
     </li>
     @endcan
-    <li class="sidebar-item{{ request()->is('pengguna*') ? ' active' : '' }}">
-        <a class="sidebar-link" href="{{ route('pengguna.index') }}">
-            <i class="align-middle" data-feather="users"></i> <span class="align-middle">Pengguna</span>
+    @can('pembelian')
+    <li class="sidebar-item{{ request()->is('pembelian*') ? ' active' : '' }}">
+        <a class="sidebar-link" href="{{ route('pembelian.index') }}">
+            <i class="align-middle" data-feather="shopping-cart"></i> <span class="align-middle">Pembelian</span>
         </a>
     </li>
     @endcan
-    @canany(['akun', 'anggota', 'pemasok', 'warna', 'satuan barang', 'ukuran', 'barang'])
+    @can('penjualan')
+    <li class="sidebar-item{{ request()->is('penjualan*') ? ' active' : '' }}">
+        <a class="sidebar-link" href="{{ route('penjualan.index') }}">
+            <i class="align-middle" data-feather="shopping-bag"></i> <span class="align-middle">Penjualan</span>
+        </a>
+    </li>
+    @endcan
+    @can('angsuran')
+    <li class="sidebar-item{{ request()->is('angsuran*') ? ' active' : '' }}">
+        <a data-bs-target="#angsuran" data-bs-toggle="collapse" class="sidebar-link{{ request()->is('angsuran*') ? '' : ' collapsed' }}">
+            <i class="align-middle" data-feather="dollar-sign"></i> <span class="align-middle">Angsuran</span>
+        </a>
+        <ul id="angsuran" class="sidebar-dropdown list-unstyled collapse{{ request()->is('angsuran*') ? ' show' : '' }}" data-bs-parent="#sidebar">
+            <li class="sidebar-item{{ request()->is('angsuran/hutang-dagang*') ? ' active' : '' }}"><a class="sidebar-link" href="{{ route('angsuran.hutang-dagang.index') }}">Hutang dagang</a></li>
+            <li class="sidebar-item{{ request()->is('angsuran/piutang-dagang*') ? ' active' : '' }}"><a class="sidebar-link" href="{{ route('angsuran.piutang-dagang.index') }}">Piutang dagang</a></li>
+        </ul>
+    </li>
+    @endcan
+    @can('riwayat')
+    <li class="sidebar-item{{ request()->is('riwayat*') ? ' active' : '' }}">
+        <a data-bs-target="#riwayat" data-bs-toggle="collapse" class="sidebar-link{{ request()->is('riwayat*') ? '' : ' collapsed' }}">
+            <i class="align-middle" data-feather="clock"></i> <span class="align-middle">Riwayat</span>
+        </a>
+        <ul id="riwayat" class="sidebar-dropdown list-unstyled collapse{{ request()->is('riwayat*') ? ' show' : '' }}" data-bs-parent="#sidebar">
+            <li class="sidebar-item{{ request()->is('riwayat/pembelian*') ? ' active' : '' }}"><a class="sidebar-link" href="{{ route('riwayat.pembelian.index') }}">Pembelian</a></li>
+            <li class="sidebar-item{{ request()->is('riwayat/penjualan*') ? ' active' : '' }}"><a class="sidebar-link" href="{{ route('riwayat.penjualan.index') }}">Penjualan</a></li>
+        </ul>
+    </li>
+    @endcan
+    @endcanany
+    @canany(['akun', 'anggota', 'pemasok', 'warna', 'satuan barang', 'ukuran', 'barang','dagangan'])
     <li class="sidebar-header">
         Master Data
     </li>
     @can('akun')
     <li class="sidebar-item{{ request()->is('akun*') ? ' active' : '' }}">
         <a class="sidebar-link" href="{{ route('akun.index') }}">
-            <i class="align-middle" data-feather="credit-card"></i> <span class="align-middle">Akun</span>
+            <i class="align-middle" data-feather="bookmark"></i> <span class="align-middle">Akun</span>
+        </a>
+    </li>
+    @endcan
+    @can('metode pembayaran')
+    <li class="sidebar-item{{ request()->is('metode-pembayaran*') ? ' active' : '' }}">
+        <a class="sidebar-link" href="{{ route('metode-pembayaran.index') }}">
+            <i class="align-middle" data-feather="credit-card"></i> <span class="align-middle">Metode Pembayaran</span>
         </a>
     </li>
     @endcan
@@ -86,31 +129,29 @@
         </a>
     </li>
     @endcan
+    @can('dagangan')
+    <li class="sidebar-item{{ request()->is('dagangan*') ? ' active' : '' }}">
+        <a class="sidebar-link" href="{{ route('dagangan.index') }}">
+            <i class="align-middle" data-feather="package"></i> <span class="align-middle">Dagangan</span>
+        </a>
+    </li>
+    @endcan
     @endcanany
-    @canany(['gudang','penjualan','pembelian'])
+    @can('pengguna')
     <li class="sidebar-header">
-        Transaksi
+        Pengguna
     </li>
-    @can('gudang')
-    <li class="sidebar-item{{ request()->is('gudang*') ? ' active' : '' }}">
-        <a class="sidebar-link" href="{{ route('gudang.index') }}">
-            <i class="align-middle" data-feather="package"></i> <span class="align-middle">Gudang</span>
+    @can('peran pengguna')
+    <li class="sidebar-item{{ request()->is('peran-pengguna*') ? ' active' : '' }}">
+        <a class="sidebar-link" href="{{ route('peran-pengguna.index') }}">
+            <i class="align-middle" data-feather="user-check"></i> <span class="align-middle">Peran Pengguna</span>
         </a>
     </li>
     @endcan
-    @can('pembelian')
-    <li class="sidebar-item{{ request()->is('pembelian*') ? ' active' : '' }}">
-        <a class="sidebar-link" href="{{ route('pembelian.index') }}">
-            <i class="align-middle" data-feather="shopping-cart"></i> <span class="align-middle">Pembelian</span>
+    <li class="sidebar-item{{ request()->is('pengguna*') ? ' active' : '' }}">
+        <a class="sidebar-link" href="{{ route('pengguna.index') }}">
+            <i class="align-middle" data-feather="users"></i> <span class="align-middle">Pengguna</span>
         </a>
     </li>
     @endcan
-    @can('penjualan')
-    <li class="sidebar-item{{ request()->is('penjualan*') ? ' active' : '' }}">
-        <a class="sidebar-link" href="{{ route('penjualan.index') }}">
-            <i class="align-middle" data-feather="shopping-bag"></i> <span class="align-middle">Penjualan</span>
-        </a>
-    </li>
-    @endcan
-    @endcanany
 </ul>

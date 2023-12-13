@@ -1,0 +1,31 @@
+{
+    "name": "nwidart/zonawaktu",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\ZonaWaktu\\": "",
+            "Modules\\ZonaWaktu\\App\\": "app/",
+            "Modules\\ZonaWaktu\\Database\\Factories\\": "database/factories/",
+            "Modules\\ZonaWaktu\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\ZonaWaktu\\Tests\\": "tests/"
+        }
+    }
+}

@@ -1,21 +1,16 @@
 <?php
 
-namespace Modules\Anggota\Database\Seeders;
+namespace Modules\Anggota\database\seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Eloquent\Model;
 
 class AnggotaDatabaseSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
-        Model::unguard();
-
-        // $this->call("OthersTableSeeder");
+        // $this->call([]);
     }
 }

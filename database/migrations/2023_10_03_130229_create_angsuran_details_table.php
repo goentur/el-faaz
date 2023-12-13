@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id')->primary();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Angsuran::class)->constrained()->cascadeOnDelete();
+            $table->unsignedBigInteger('metode_pembayaran_id')->nullable();
             $table->bigInteger('tanggal');
             $table->bigInteger('nominal');
             $table->timestamps();

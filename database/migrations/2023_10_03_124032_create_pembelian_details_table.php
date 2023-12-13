@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Barang;
+use App\Models\PemasokBarangDetail;
 use App\Models\Pembelian;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -16,7 +16,8 @@ return new class extends Migration
         Schema::create('pembelian_details', function (Blueprint $table) {
             $table->unsignedBigInteger('id')->primary();
             $table->foreignIdFor(Pembelian::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(Barang::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(PemasokBarangDetail::class)->constrained()->cascadeOnDelete();
+            $table->bigInteger('tanggal');
             $table->smallInteger('kuantitas');
             $table->bigInteger('harga');
             $table->timestamps();

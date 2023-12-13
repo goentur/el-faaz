@@ -1,0 +1,11 @@
+{
+    "name": "Riwayat",
+    "alias": "riwayat",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Riwayat\\app\\Providers\\RiwayatServiceProvider"
+    ],
+    "files": []
+}

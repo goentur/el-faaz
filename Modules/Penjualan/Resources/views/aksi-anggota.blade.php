@@ -1,1 +1,0 @@
-<button class="btn btn-sm btn-success aksi-anggota" data-id="{{ enkrip($data->id) }}" data-nama="{{ $data->nama }}"><i class="fas fa-check"></i></button>

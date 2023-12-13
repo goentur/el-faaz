@@ -20,8 +20,11 @@ class PemasokController extends Controller
     public function index(Request $request, Builder $builder)
     {
         if ($request->ajax()) {
-            return DataTables::eloquent(Pemasok::select('id', 'nama'))
+            return DataTables::eloquent(Pemasok::select('id', 'nama', 'status'))
                 ->addIndexColumn()
+                ->editColumn('status', function (Pemasok $data) {
+                    return view($this->attribute['view'] . 'status', ['data' => $data]);
+                })
                 ->addColumn('aksi', function (Pemasok $data) {
                     $kirim = [
                         'data' => $data,
@@ -33,6 +36,7 @@ class PemasokController extends Controller
         $dataTable = $builder
             ->addIndex(['class' => 'w-1 text-center', 'data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => 'NO'])
             ->addColumn(['data' => 'nama', 'name' => 'nama', 'title' => 'NAMA'])
+            ->addColumn(['data' => 'status', 'name' => 'status', 'title' => 'STATUS'])
             ->addColumn(['class' => 'w-1', 'data' => 'aksi', 'name' => 'aksi', 'title' => 'AKSI'])
             ->parameters([
                 'ordering' => false,
@@ -65,6 +69,7 @@ class PemasokController extends Controller
         ]);
         Pemasok::create([
             'nama' => $request->nama,
+            'status' => 1,
         ]);
         return redirect()->route($this->attribute['link'] . 'index')->with(['success' => 'Data berhasil disimpan']);
     }
@@ -110,7 +115,7 @@ class PemasokController extends Controller
     public function sampah(Request $request, Builder $builder)
     {
         if ($request->ajax()) {
-            return DataTables::eloquent(Pemasok::onlyTrashed()->select('id', 'nama'))
+            return DataTables::eloquent(Pemasok::onlyTrashed()->select('id', 'nama', 'status'))
                 ->addIndexColumn()
                 ->addColumn('aksi', function (Pemasok $data) {
                     $kirim = [
@@ -165,6 +170,31 @@ class PemasokController extends Controller
                 'status' => true,
                 'message' => 'Data berhasil dihapus selamanya.',
             ]);
+        }
+    }
+    public function dataPemasok(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required|string',
+        ]);
+        if ($request->ajax()) {
+            $pemasok = Pemasok::select('id', 'nama')->where('nama', 'like', '%' . $request->nama . '%')->limit(10);
+            if ($pemasok->count() > 0) {
+                $data = [];
+                $data[] = [
+                    'value' => null,
+                    'label' => "Pilih salah satu",
+                ];
+                foreach ($pemasok->get() as $k) {
+                    $data[] = [
+                        'value' => enkrip($k->id),
+                        'label' => $k->nama,
+                    ];
+                }
+                return response()->json($data);
+            } else {
+                return response()->json([]);
+            }
         }
     }
 }

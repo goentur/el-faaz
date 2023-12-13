@@ -10,8 +10,4 @@ class Barang extends Model
 {
     use HasFactory, SoftDeletes;
     protected $guarded = ['id'];
-    public function warna()
-    {
-        return $this->belongsTo(Warna::class);
-    }
 }

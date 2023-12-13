@@ -17,7 +17,15 @@
     },
     "autoload": {
         "psr-4": {
-            "Modules\\Anggota\\": ""
+            "Modules\\Anggota\\": "",
+            "Modules\\Anggota\\App\\": "app/",
+            "Modules\\Anggota\\Database\\Factories\\": "database/factories/",
+            "Modules\\Anggota\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Anggota\\Tests\\": "tests/"
         }
     }
 }

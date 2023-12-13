@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,6 +14,7 @@ return new class extends Migration
     {
         Schema::create('jurnals', function (Blueprint $table) {
             $table->unsignedBigInteger('id')->primary();
+            $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->tinyInteger('jenis')->comment('1 = pembelian, 2 = penjualan');
             $table->bigInteger('tanggal');
             $table->string('keterangan');

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Gudang\app\Http\Controllers\DetailGudangController;
 use Modules\Gudang\app\Http\Controllers\GudangController;
 
 /*
@@ -23,4 +24,9 @@ Route::middleware('auth', 'can:gudang')->group(function () {
     });
     Route::post('gudang/data', [GudangController::class, 'dataGudang'])->name('gudang.data');
     Route::resource('gudang', GudangController::class);
+    Route::prefix('gudang/detail')->group(function () {
+        Route::get('{id}', [DetailGudangController::class, 'index'])->name('gudang.detail.index');
+        Route::post('riwayat-masuk', [DetailGudangController::class, 'riwayatMasuk'])->name('gudang.detail.riwayat-masuk');
+        Route::post('riwayat-keluar', [DetailGudangController::class, 'riwayatKeluar'])->name('gudang.detail.riwayat-keluar');
+    });
 });

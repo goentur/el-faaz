@@ -20,9 +20,11 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'zona_waktu_id',
         'name',
         'email',
         'password',
+        'kode_printer',
         'sidebar',
     ];
 
@@ -45,4 +47,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function zonaWaktu()
+    {
+        return $this->belongsTo(ZonaWaktu::class);
+    }
 }
