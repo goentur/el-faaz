@@ -23,13 +23,13 @@ class AnggotaController extends Controller
             return DataTables::eloquent(Anggota::with('piutangDagang')->select('id', 'nama'))
                 ->addIndexColumn()
                 ->editColumn('id', function (Anggota $data) {
-                    $total = 0;
+                $totalPiutangDagang = 0;
                     if ($data->piutangDagang) {
                         foreach ($data->piutangDagang as $p) {
-                            $total += ($p->total - $p->bayar);
+                        $totalPiutangDagang += ($p->total - $p->bayar - $p->retur->sum('total'));
                         }
                     }
-                    return rupiah($total);
+                return rupiah($totalPiutangDagang);
                 })
                 ->addColumn('aksi', function (Anggota $data) {
                     $kirim = [

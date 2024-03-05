@@ -24,7 +24,7 @@ return new class extends Migration
             $table->bigInteger('total');
             $table->bigInteger('ongkir')->nullable();
             $table->tinyInteger('jenis')->comment('1 = penjualan anggota, 2 = penjualan non anggota, 3 = penjualan marketplace');
-            $table->tinyInteger('status')->comment('1 = belum, 2 = sudah, 3 = masukan ke jurnal');
+            $table->tinyInteger('status')->comment('1 = belum, 2 = sudah, 3 = PO tapi lunas, 4 = jurnal lunas, 5 = jurnal belum lunas');
             $table->timestamps();
         });
     }

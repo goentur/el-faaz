@@ -22,4 +22,12 @@ class Penjualan extends Model
     {
         return $this->hasMany(PenjualanDetail::class)->with('pemasokBarangDetail');
     }
+    public function retur()
+    {
+        return $this->hasMany(Retur::class, 'transaksi_id', 'id')->where(['jenis' => 2]);
+    }
+    public function returWithDetail()
+    {
+        return $this->hasMany(Retur::class, 'transaksi_id', 'id')->where(['jenis' => 2])->with('user', 'onlyReturDetail');
+    }
 }

@@ -17,5 +17,7 @@
     "MetodePembayaran": true,
     "Angsuran": true,
     "Dagangan": true,
-    "Riwayat": true
+    "Riwayat": true,
+    "Retur": true,
+    "Jurnal": true
 }

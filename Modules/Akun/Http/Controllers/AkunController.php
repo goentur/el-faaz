@@ -3,7 +3,7 @@
 namespace Modules\Akun\Http\Controllers;
 
 use App\Models\Akun;
-use App\Models\RiwayatAkun;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Yajra\DataTables\Facades\DataTables;
@@ -76,20 +76,11 @@ class AkunController extends Controller
             'debet' => 'required|string',
             'kredit' => 'required|string'
         ]);
-        $akun = Akun::create([
+        Akun::create([
             'kode' => $request->kode,
             'nama' => $request->nama,
             'debet' => str_replace(",", "", $request->debet),
             'kredit' => str_replace(",", "", $request->kredit)
-        ]);
-        RiwayatAkun::create([
-            'id' => id(),
-            'user_id' => auth()->user()->id,
-            'akun_id' => $akun->id,
-            'tanggal' => time(),
-            'debet' => str_replace(",", "", $request->debet),
-            'kredit' => str_replace(",", "", $request->kredit),
-            'keterangan' => "pendaftaran akun",
         ]);
         return redirect()->route($this->attribute['link'] . 'index')->with(['success' => 'Data berhasil disimpan']);
     }
@@ -122,15 +113,6 @@ class AkunController extends Controller
                 'nama' => $request->nama,
                 'debet' => str_replace(",", "", $request->debet),
                 'kredit' => str_replace(",", "", $request->kredit)
-            ]);
-            RiwayatAkun::create([
-                'id' => id(),
-                'user_id' => $user->id,
-                'akun_id' => $idAkun,
-                'tanggal' => time(),
-                'debet' => str_replace(",", "", $request->debet),
-                'kredit' => str_replace(",", "", $request->kredit),
-                'keterangan' => "perubahan nama dan/atau nominal debet maupun kredit",
             ]);
         } else {
             Akun::select('id')->find($idAkun)->update([
@@ -221,6 +203,27 @@ class AkunController extends Controller
                 'status' => true,
                 'message' => 'Data berhasil dihapus selamanya.',
             ]);
+        }
+    }
+    public function data(Request $request): JsonResponse
+    {
+        $request->validate([
+            'nama' => 'required|string',
+        ]);
+        if ($request->ajax()) {
+            $akuns = Akun::select('id', 'kode', 'nama')->where('kode', 'like', '%' . $request->nama . '%')->orWhere('nama', 'like', '%' . $request->nama . '%')->orderBy('id', 'desc')->limit(10);
+            if ($akuns->count() > 0) {
+                $data = [];
+                foreach ($akuns->get() as $k) {
+                    $data[] = [
+                        'value' => $k->id,
+                        'label' => $k->kode . ' - ' . $k->nama,
+                    ];
+                }
+                return response()->json($data);
+            } else {
+                return response()->json([]);
+            }
         }
     }
 }

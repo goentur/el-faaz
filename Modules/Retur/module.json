@@ -1,0 +1,11 @@
+{
+    "name": "Retur",
+    "alias": "retur",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Retur\\app\\Providers\\ReturServiceProvider"
+    ],
+    "files": []
+}

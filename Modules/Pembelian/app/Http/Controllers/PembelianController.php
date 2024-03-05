@@ -48,9 +48,7 @@ class PembelianController extends Controller
                         'nama' => 'required|string',
                     ]);
                     $pemasokBarangDetail = PemasokBarangDetail::with('pemasok', 'barangDetail')->select('id', 'pemasok_id', 'barang_detail_id', 'stok', 'harga_beli')->where('pemasok_id', $idPemasok)->orderBy('stok', 'ASC')->orderBy('id', 'desc')->whereHas('barangDetail', function ($query) use ($request) {
-                        $query->whereHas('barang', function ($q) use ($request) {
-                            $q->where('nama', 'like', '%' . $request->nama . '%');
-                        });
+                        $query->where('nama', 'like', '%' . $request->nama . '%');
                     })->limit($limit);
                 } else {
                     $pemasokBarangDetail = PemasokBarangDetail::with('pemasok', 'barangDetail')->select('id', 'pemasok_id', 'barang_detail_id', 'stok', 'harga_beli')->where('pemasok_id', $idPemasok)->orderBy('stok', 'ASC')->orderBy('id', 'desc')->limit($limit);

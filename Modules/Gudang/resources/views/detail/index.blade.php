@@ -85,7 +85,7 @@
                         <div class="alert-message">
                             <h4 class="alert-heading fw-bold">INFORMASI!</h4>
                             <ul>
-                                <li>Kolom <b>Status</b> pada tabel riwayat barang masuk merupakan status pembelian barang.</li>
+                                <li>Kolom <b>Status</b> pada tabel riwayat barang masuk merupakan status pembelian barang ataupun retur barang</li>
                             </ul>
                         </div>
                     </div>

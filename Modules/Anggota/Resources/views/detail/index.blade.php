@@ -47,18 +47,34 @@
                     <tr>
                         <td class="text-end" width="99%">TOTAL</td>
                         <td>:</td>
-                        <td class="text-end" id="textTotal"></td>
+                        <td class="text-end" id="textTotal">0</td>
                     </tr>
                     <tr>
-                        <td class="text-end" width="99%">BAYAR</td>
+                        <td class="text-end">BAYAR</td>
                         <td>:</td>
-                        <td class="text-end" id="textBayar"></td>
+                        <td class="text-end" id="textBayar">0</td>
                     </tr>
                     <tr>
-                        <td class="text-end" width="99%">KEKURANGAN</td>
+                        <td class="text-end">KEKURANGAN</td>
                         <td>:</td>
-                        <td class="text-end" id="textKekurangan"></td>
+                        <td class="text-end" id="textKekurangan">0</td>
                     </tr>
+                </table>
+                <div class="h3"><i class="fa fa-list-ol"></i> DAFTAR BARANG YANG DIRETUR</div>
+                <table class="table table-bordered table-sm" id="tableDaftarBarangRetur">
+                    <thead>
+                        <tr>
+                            <th class="w-1">NO</th>
+                            <th>PENGGUNA</th>
+                            <th>TANGGAL</th>
+                            <th>PEMASOK</th>
+                            <th>BARANG</th>
+                            <th>SATUAN</th>
+                            <th>UKURAN</th>
+                            <th>KUANTITAS</th>
+                            <th>HARGA</th>
+                        </tr>
+                    </thead>
                 </table>
             </div>
         </div>
@@ -68,4 +84,100 @@
 @push('vendor-js')
 <script src="{{ asset('js/datatables.js') }}"></script>
 @endpush
-@push('js')<script>$(function(){$("table#daftarBarang").DataTable({info:!1,ordering:!1,paging:!1,responsive:!0,bAutoWidth:!1,lengthMenu:[25,50,75,100],language:{url:"{{ asset('js/id.json') }}"},bDestroy:!0,processing:!0,ajax:{url:"{{ route('anggota.detail.daftar-barang') }}",type:"POST",data:{id:"{{enkrip($data->id)}}"},error:function(a,t,e){alertApp("error","Daftar barang yang dibeli tidak bisa ditampilkan.")}},columns:[{className:"w-1 text-center",data:"no"},{data:"pengguna"},{data:"pemasok"},{data:"barang"},{data:"satuan"},{data:"ukuran"},{data:"tanggal"},{className:"w-1 text-center",data:"status"},{className:"w-1 text-center",data:"kuantitas"},{className:"w-1 text-end",data:"harga"},],initComplete:function(a,t){$("#textTotal").html(t.total),$("#textBayar").html(t.bayar),$("#textKekurangan").html(t.kekurangan)}})});</script>@endpush
+@push('js')<script>
+    $(function() {
+        $("table#daftarBarang").DataTable({
+            info: !1,
+            ordering: !1,
+            paging: !1,
+            responsive: !0,
+            bAutoWidth: !1,
+            lengthMenu: [25, 50, 75, 100],
+            language: {
+                url: "{{ asset('js/id.json') }}"
+            },
+            bDestroy: !0,
+            processing: !0,
+            ajax: {
+                url: "{{ route('anggota.detail.daftar-barang') }}",
+                type: "POST",
+                data: {
+                    id: "{{enkrip($data->id)}}"
+                },
+                error: function(a, t, e) {
+                    alertApp("error", "Daftar barang yang dibeli tidak bisa ditampilkan.")
+                }
+            },
+            columns: [{
+                className: "w-1 text-center",
+                data: "no"
+            }, {
+                data: "pengguna"
+            }, {
+                data: "pemasok"
+            }, {
+                data: "barang"
+            }, {
+                data: "satuan"
+            }, {
+                data: "ukuran"
+            }, {
+                data: "tanggal"
+            }, {
+                className: "w-1 text-center",
+                data: "status"
+            }, {
+                className: "w-1 text-center",
+                data: "kuantitas"
+            }, {
+                className: "w-1 text-end",
+                data: "harga"
+            }, ],
+            initComplete: function(a, t) {
+                daftarBarangRetur(t.retur), $("#textTotal").html(t.total), $("#textBayar").html(t.bayar), $("#textKekurangan").html(t.kekurangan)
+            }
+        })
+    });
+
+    function daftarBarangRetur(data) {
+        $('#tableDaftarBarangRetur').DataTable({
+            info: !1,
+            order: [
+                [0, 'asc']
+            ],
+            ordering: 0,
+            paging: !1,
+            responsive: !0,
+            bAutoWidth: !1,
+            lengthMenu: [25, 50, 75, 100],
+            language: {
+                url: "{{ asset('js/id.json') }}"
+            },
+            bDestroy: !0,
+            processing: !0,
+            data: data,
+            columns: [{
+                className: "w-1 text-center",
+                data: "no"
+            }, {
+                data: "pengguna"
+            }, {
+                data: "tanggal"
+            }, {
+                data: "pemasok"
+            }, {
+                data: "barang"
+            }, {
+                data: "satuan"
+            }, {
+                data: "ukuran"
+            }, {
+                className: "w-1 text-center",
+                data: "kuantitas"
+            }, {
+                className: "w-1 text-end",
+                data: "harga"
+            }]
+        });
+    }
+</script>@endpush

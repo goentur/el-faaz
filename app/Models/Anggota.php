@@ -12,6 +12,6 @@ class Anggota extends Model
     protected $guarded = ['id'];
     public function piutangDagang()
     {
-        return $this->hasMany(Penjualan::class)->where('status', 1)->with('penjualanDetail');
+        return $this->hasMany(Penjualan::class)->where('status', 1)->with('retur');
     }
 }

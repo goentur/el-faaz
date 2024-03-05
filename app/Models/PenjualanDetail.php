@@ -18,4 +18,8 @@ class PenjualanDetail extends Model
     {
         return $this->belongsTo(PemasokBarangDetail::class)->with('barangDetail', 'pemasok');
     }
+    public function onlyPemasokBarangDetail()
+    {
+        return $this->belongsTo(PemasokBarangDetail::class, 'pemasok_barang_detail_id', 'id');
+    }
 }

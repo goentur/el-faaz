@@ -1,0 +1,31 @@
+{
+    "name": "nwidart/retur",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Retur\\": "",
+            "Modules\\Retur\\App\\": "app/",
+            "Modules\\Retur\\Database\\Factories\\": "database/factories/",
+            "Modules\\Retur\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Retur\\Tests\\": "tests/"
+        }
+    }
+}

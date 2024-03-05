@@ -49,3 +49,11 @@ function zonaWaktuPenguna()
 {
     return auth()->user()->zonaWaktu;
 }
+function formatTanggal($tanggal, $zonaWaktu, $bold = false)
+{
+     if ($bold) {
+          return date('Y-m-d H:i:s', ($tanggal + $zonaWaktu->gmt_offset)) . ' <b>' . $zonaWaktu->singkatan . '</b>';
+     } else {
+          return date('Y-m-d H:i:s', ($tanggal + $zonaWaktu->gmt_offset)) . ' ' . $zonaWaktu->singkatan;
+     }
+}

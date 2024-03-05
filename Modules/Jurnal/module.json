@@ -1,0 +1,11 @@
+{
+    "name": "Jurnal",
+    "alias": "jurnal",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Jurnal\\App\\Providers\\JurnalServiceProvider"
+    ],
+    "files": []
+}

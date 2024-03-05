@@ -29,6 +29,7 @@ Route::middleware('auth', 'can:angsuran')->prefix('angsuran')->group(function ()
         Route::post('data', [AngsuranPiutangDagangController::class, 'data'])->name('angsuran.piutang-dagang.data');
         Route::get('detail/{id}', [AngsuranPiutangDagangController::class, 'detail'])->name('angsuran.piutang-dagang.detail');
         Route::post('detail/daftar-barang', [AngsuranPiutangDagangController::class, 'daftarBarang'])->name('angsuran.piutang-dagang.daftar.barang');
+        Route::post('detail/daftar-barang-retur', [AngsuranPiutangDagangController::class, 'daftarBarangRetur'])->name('angsuran.piutang-dagang.daftar.barang.retur');
         Route::post('detail/data-angsuran', [AngsuranPiutangDagangController::class, 'detailDataAngsuran'])->name('angsuran.piutang-dagang.detail.data.angsuran');
         Route::post('detail/tambah-angsuran', [AngsuranPiutangDagangController::class, 'tambahAngsuran'])->name('angsuran.piutang-dagang.detail.tambah-angsuran');
     });

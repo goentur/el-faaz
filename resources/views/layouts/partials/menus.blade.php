@@ -21,7 +21,7 @@
         </a>
     </li>
     @endrole
-    @canany(['gudang','penjualan','pembelian','angsuran','riwayat'])
+    @canany(['gudang','penjualan','pembelian','angsuran','riwayat','retur','jurnal'])
     <li class="sidebar-header">
         Transaksi
     </li>
@@ -65,6 +65,27 @@
         <ul id="riwayat" class="sidebar-dropdown list-unstyled collapse{{ request()->is('riwayat*') ? ' show' : '' }}" data-bs-parent="#sidebar">
             <li class="sidebar-item{{ request()->is('riwayat/pembelian*') ? ' active' : '' }}"><a class="sidebar-link" href="{{ route('riwayat.pembelian.index') }}">Pembelian</a></li>
             <li class="sidebar-item{{ request()->is('riwayat/penjualan*') ? ' active' : '' }}"><a class="sidebar-link" href="{{ route('riwayat.penjualan.index') }}">Penjualan</a></li>
+        </ul>
+    </li>
+    @endcan
+    @can('retur')
+    <li class="sidebar-item{{ request()->is('retur*') ? ' active' : '' }}">
+        <a data-bs-target="#retur" data-bs-toggle="collapse" class="sidebar-link{{ request()->is('retur*') ? '' : ' collapsed' }}">
+            <i class="align-middle" data-feather="corner-down-left"></i> <span class="align-middle">Retur</span>
+        </a>
+        <ul id="retur" class="sidebar-dropdown list-unstyled collapse{{ request()->is('retur*') ? ' show' : '' }}" data-bs-parent="#sidebar">
+            <li class="sidebar-item{{ request()->is('retur/penjualan*') ? ' active' : '' }}"><a class="sidebar-link" href="{{ route('retur.penjualan.index') }}">Penjualan</a></li>
+        </ul>
+    </li>
+    @endcan
+    @can('jurnal')
+    <li class="sidebar-item{{ request()->is('jurnal*') ? ' active' : '' }}">
+        <a data-bs-target="#jurnal" data-bs-toggle="collapse" class="sidebar-link{{ request()->is('jurnal*') ? '' : ' collapsed' }}">
+            <i class="align-middle" data-feather="book"></i> <span class="align-middle">Jurnal</span>
+        </a>
+        <ul id="jurnal" class="sidebar-dropdown list-unstyled collapse{{ request()->is('jurnal*') ? ' show' : '' }}" data-bs-parent="#sidebar">
+            <li class="sidebar-item{{ request()->is('jurnal/penjualan/lunas*') ? ' active' : '' }}"><a class="sidebar-link" href="{{ route('jurnal.penjualan.lunas.index') }}">Penjualan Lunas</a></li>
+            <li class="sidebar-item{{ request()->is('jurnal/pembelian/lunas*') ? ' active' : '' }}"><a class="sidebar-link" href="{{ route('jurnal.pembelian.lunas.index') }}">Pembelian Lunas</a></li>
         </ul>
     </li>
     @endcan

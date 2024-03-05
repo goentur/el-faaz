@@ -41,13 +41,11 @@ class PenjualanController extends Controller
                 $request->validate([
                     'nama' => 'required|string',
                 ]);
-                $pemasokBarangDetails = PemasokBarangDetail::with('pemasok', 'barangDetail')->select('id', 'pemasok_id', 'barang_detail_id', 'stok', 'harga_beli')->where('harga_beli', '>', 0)->inRandomOrder()->whereHas('barangDetail', function ($query) use ($request) {
-                    $query->whereHas('barang', function ($q) use ($request) {
-                        $q->where('nama', 'like', '%' . $request->nama . '%');
-                    });
+                $pemasokBarangDetails = PemasokBarangDetail::with('pemasok', 'barangDetail')->select('id', 'pemasok_id', 'barang_detail_id', 'stok', 'harga_beli')->inRandomOrder()->whereHas('barangDetail', function ($query) use ($request) {
+                    $query->where('nama', 'like', '%' . $request->nama . '%');
                 })->limit($limit);
             } else {
-                $pemasokBarangDetails = PemasokBarangDetail::with('pemasok', 'barangDetail')->select('id', 'pemasok_id', 'barang_detail_id', 'stok', 'harga_beli')->where('harga_beli', '>', 0)->inRandomOrder()->limit($limit);
+                $pemasokBarangDetails = PemasokBarangDetail::with('pemasok', 'barangDetail')->select('id', 'pemasok_id', 'barang_detail_id', 'stok', 'harga_beli')->inRandomOrder()->limit($limit);
             }
             if ($pemasokBarangDetails->count() > 0) {
                 $fullData = [];
@@ -192,7 +190,7 @@ class PenjualanController extends Controller
                     $idBarang = dekrip($data['idBarang']);
                     $harga = str_replace(",", "", $data['hargaBarang']);
                     $statusBarang = "";
-                    $pemasokBarangDetail = PemasokBarangDetail::with('barangDetail')->select('id', 'stok', 'barang_detail_id')->find($idBarang);
+                    $pemasokBarangDetail = PemasokBarangDetail::select('id', 'stok')->find($idBarang);
                     if ($data['statusBarang'] === 'po') {
                         $statusBarang = "(PO) ";
                         $barangPo = true;
@@ -200,16 +198,8 @@ class PenjualanController extends Controller
                     $pemasokBarangDetail->update([
                         'stok' => $pemasokBarangDetail->stok - $data['kuantitas'],
                     ]);
-                    // set nama barang
-                    $barang = "";
-                    if ($pemasokBarangDetail->barangDetail && $pemasokBarangDetail->barangDetail->barang) {
-                        $barang = $pemasokBarangDetail->barangDetail->barang->nama;
-                    }
-                    $warna = '';
-                    if ($pemasokBarangDetail->barangDetail && $pemasokBarangDetail->barangDetail->warna) {
-                        $warna = ' - ' . $pemasokBarangDetail->barangDetail->warna->nama;
-                    }
-                    $barangs .= $statusBarang . "{$barang}{$warna}\n" . rupiah($harga) . " X {$data['kuantitas']} : " . rupiah($harga * $data['kuantitas']) . "\n";
+                    $explode = explode(' | ', $data['namaBarang']);
+                    $barangs .= $statusBarang . "{$explode[1]}\n" . rupiah($harga) . " X {$data['kuantitas']} : " . rupiah($harga * $data['kuantitas']) . "\n";
                     PenjualanDetail::create([
                         'id' => id(),
                         'penjualan_id' => $idPenjualan,
@@ -221,9 +211,15 @@ class PenjualanController extends Controller
                     ]);
                 }
                 if ($barangPo) {
-                    $penjualan->update([
-                        'status' => 1,
-                    ]);
+                    if ($bayar >= $request->total) {
+                        $penjualan->update([
+                            'status' => 3
+                        ]);
+                    } else {
+                        $penjualan->update([
+                            'status' => 1
+                        ]);
+                    }
                 }
 
                 // ANGSURAN
@@ -246,7 +242,6 @@ class PenjualanController extends Controller
                         ]);
                     }
                 }
-                $zonaWaktuPengguna = zonaWaktuPenguna();
                 DB::commit();
                 return response()->json([
                     'data' => [
@@ -254,7 +249,7 @@ class PenjualanController extends Controller
                         'total' => rupiah($request->total),
                         'bayar' => rupiah($bayar),
                         'kembalian' => $bayar <= $request->total ? 0 : rupiah($bayar - $request->total),
-                        'tgl' => date('Y-m-d H:i:s', ($tanggal + $zonaWaktuPengguna->gmt_offset)) . ' ' . $zonaWaktuPengguna->singkatan,
+                        'tgl' => formatTanggal($tanggal, zonaWaktuPenguna()),
                         'barang' => $barangs,
                     ],
                     'status' => true,
@@ -294,6 +289,18 @@ class PenjualanController extends Controller
                             $warna = ' - TIDAK TERDAFTAR';
                             if ($p->pemasokBarangDetail->barangDetail->warna) {
                                 $warna = ' - ' . $p->pemasokBarangDetail->barangDetail->warna->nama;
+                            }
+                            $ukuran = ' ( TIDAK TERDAFTAR )';
+                            if ($p->pemasokBarangDetail->barangDetail->ukuran) {
+                                $ukuran = ' ( ';
+                                foreach ($p->pemasokBarangDetail->barangDetail->ukuran as $u) {
+                                    if ($u === $p->pemasokBarangDetail->barangDetail->ukuran->last()) {
+                                        $ukuran .= $u->nama;
+                                    } else {
+                                        $ukuran .= $u->nama . ", ";
+                                    }
+                                }
+                                $ukuran .= ' )';
                             }
                             $barangs .= $statusBarang . "{$barang}{$warna}\n" . rupiah($p->harga) . " X {$p->kuantitas} : " . rupiah($p->harga * $p->kuantitas) . "\n";
                         }

@@ -68,7 +68,7 @@ class AngsuranHutangDagangController extends Controller
                         'no' => ++$key . '.',
                         'pengguna' => $p->user ? $p->user->name : 'PENGGUNA TIDAK TERDAFTAR',
                         'pemasok' => $p->pemasok ? $p->pemasok->nama : 'PEMASOK TIDAK TERDAFTAR',
-                        'tanggal' => date('Y-m-d H:i:s', ($p->tanggal + $zonaWaktuPengguna->gmt_offset)) . ' ' . $zonaWaktuPengguna->singkatan,
+                        'tanggal' => formatTanggal($p->tanggal, $zonaWaktuPengguna),
                         'total' => rupiah($p->total),
                         'bayar' => rupiah($bayar),
                         'kekurangan' => rupiah($p->total - $bayar),
@@ -168,7 +168,7 @@ class AngsuranHutangDagangController extends Controller
                         'no' => ++$key . '.',
                         'pengguna' => $p->user ? $p->user->name : 'PENGGUNA TIDAK TERDAFTAR',
                         'metode' => $p->metodePembayaran ? $p->metodePembayaran->nama : 'METODE PEMBAYARAN TIDAK TERDAFTAR',
-                        'tanggal' => date('Y-m-d H:i:s', ($p->tanggal + $zonaWaktuPengguna->gmt_offset)) . ' ' . $zonaWaktuPengguna->singkatan,
+                        'tanggal' => formatTanggal($p->tanggal, $zonaWaktuPengguna),
                         'nominal' => rupiah($p->nominal),
                     ];
                 }

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignIdFor(Barang::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Satuan::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Warna::class)->constrained()->cascadeOnDelete();
+            $table->string('nama');
             $table->text('foto')->nullable();
             $table->softDeletes();
             $table->timestamps();

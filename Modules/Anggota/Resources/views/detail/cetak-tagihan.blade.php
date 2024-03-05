@@ -122,68 +122,59 @@
                                         </tr>
                                    </thead>
                                    <tbody>
-                                        @php
-                                        $no = 1;
-                                        $total = 0;
-                                        $bayar = 0;
-                                        @endphp
-                                        @foreach ($penjualan as $p)
-                                        @php
-                                        $total += $p->total;
-                                        $bayar += $p->bayar;
-                                        @endphp   
-                                        @foreach ($p->penjualanDetail as $pd)
-                                        @if ($pd->pemasokBarangDetail && $pd->pemasokBarangDetail->barangDetail)
-                                        @php
-                                             $barang = '<span style="color: red;">TIDAK TERDAFTAR</span>';
-                                             if ($pd->pemasokBarangDetail->barangDetail->barang) {
-                                                  $barang = $pd->pemasokBarangDetail->barangDetail->barang->nama;
-                                             }
-                                             $warna = ' - <span style="color: red;">TIDAK TERDAFTAR</span>';
-                                             if ($pd->pemasokBarangDetail->barangDetail->warna) {
-                                                  $warna = ' - ' . $pd->pemasokBarangDetail->barangDetail->warna->nama;
-                                             }
-                                             $satuan = '<span style="color: red;">TIDAK TERDAFTAR</span>';
-                                             if ($pd->pemasokBarangDetail->barangDetail->satuan) {
-                                                  $satuan = $pd->pemasokBarangDetail->barangDetail->satuan->nama;
-                                             }
-                                             $ukuran = '<span style="color: red;">TIDAK TERDAFTAR</span>';
-                                             if ($pd->pemasokBarangDetail->barangDetail->ukuran) {
-                                                  $ukuran = '';
-                                                  foreach ($pd->pemasokBarangDetail->barangDetail->ukuran as $u) {
-                                                       if ($u === $pd->pemasokBarangDetail->barangDetail->ukuran->last()) {
-                                                            $ukuran .= $u->nama;
-                                                       } else {
-                                                            $ukuran .= $u->nama . ", ";
-                                                       }
-                                                  }
-                                             }
-                                        @endphp
+                                        @foreach ($barang as $key => $value)
                                         <tr>
-                                             <td align="center" style="color: black; font-family: 'Times New Roman'; font-size: 12px">{{ $no++ }}.</td>
-                                             <td style="color: black; font-family: 'Times New Roman'; font-size: 12px">{!! $p->user ? $p->user->name : '<span style="color: red;">PENGGUNA TIDAK DITEMUKAN</span>' !!}</td>
-                                             <td style="color: black; font-family: 'Times New Roman'; font-size: 12px">{!! $barang.''.$warna !!}</td>
-                                             <td style="color: black; font-family: 'Times New Roman'; font-size: 12px">{!! $satuan !!}</td>
-                                             <td style="color: black; font-family: 'Times New Roman'; font-size: 12px">{!! $ukuran !!}</td>
-                                             <td style="color: black; font-family: 'Times New Roman'; font-size: 12px">{!! date('Y-m-d H:i:s', ($pd->tanggal + $zonaWaktuPengguna->gmt_offset)) . ' <b>' . $zonaWaktuPengguna->singkatan . '</b>' !!}</td>
-                                             <td align="center" width="1%" style="color: black; font-family: 'Times New Roman'; font-size: 12px">{{ $pd->kuantitas }}</td>
-                                             <td align="right" width="1%" style="color: black; font-family: 'Times New Roman'; font-size: 12px">{{ rupiah($pd->harga) }}</td>
+                                             <td align="center" style="color: black; font-family: 'Times New Roman'; font-size: 12px">{{ $value['no'] }}.</td>
+                                             <td style="color: black; font-family: 'Times New Roman'; font-size: 12px">{!! $value['pengguna'] !!}</td>
+                                             <td style="color: black; font-family: 'Times New Roman'; font-size: 12px">{!! $value['barang'] !!}</td>
+                                             <td style="color: black; font-family: 'Times New Roman'; font-size: 12px">{!! $value['satuan'] !!}</td>
+                                             <td style="color: black; font-family: 'Times New Roman'; font-size: 12px">{!! $value['ukuran'] !!}</td>
+                                             <td style="color: black; font-family: 'Times New Roman'; font-size: 12px">{!! $value['tanggal'] !!}</td>
+                                             <td align="center" style="color: black; font-family: 'Times New Roman'; font-size: 12px">{!! $value['kuantitas'] !!}</td>
+                                             <td align="right" style="color: black; font-family: 'Times New Roman'; font-size: 12px;font-weight: bold">{!! $value['harga'] !!}</td>
                                         </tr>
-                                        @endif
-                                        @endforeach
                                         @endforeach
                                         <tr>
                                              <td align="right" style="color: black; font-family: 'Times New Roman'; font-size: 14px;font-weight:bold" colspan="6">TOTAL</td>
-                                             <td align="right" style="color: black; font-family: 'Times New Roman'; font-size: 14px;font-weight:bold" colspan="2">{{ rupiah($total) }}</td>
+                                             <td align="right" style="color: black; font-family: 'Times New Roman'; font-size: 14px;font-weight:bold" colspan="2">{{ $total }}</td>
                                         </tr>
                                         <tr>
                                              <td align="right" style="color: black; font-family: 'Times New Roman'; font-size: 14px;font-weight:bold" colspan="6">BAYAR</td>
-                                             <td align="right" style="color: black; font-family: 'Times New Roman'; font-size: 14px;font-weight:bold" colspan="2">{{ rupiah($bayar) }}</td>
+                                             <td align="right" style="color: black; font-family: 'Times New Roman'; font-size: 14px;font-weight:bold" colspan="2">{{ $bayar }}</td>
                                         </tr>
                                         <tr>
                                              <td align="right" style="color: black; font-family: 'Times New Roman'; font-size: 14px;font-weight:bold" colspan="6">KEKURANGAN</td>
-                                             <td align="right" style="color: black; font-family: 'Times New Roman'; font-size: 14px;font-weight:bold" colspan="2">{{ rupiah($total - $bayar) }}</td>
+                                             <td align="right" style="color: black; font-family: 'Times New Roman'; font-size: 14px;font-weight:bold" colspan="2">{{ $kekurangan }}</td>
                                         </tr>
+                                   </tbody>
+                              </table>
+                              <h4 style="margin-left: 2.5%;">DAFTAR RETUR BARANG BERDASARKAN TRANSAKSI PEMBELIAN DIATAS.</h4>
+                              <table width="95%" style="margin-left: 2.5%;margin-right: 2.5%; margin-top: 5px; border-collapse: collapse" cellpadding="3" cellspacing="3" border="1">
+                                   <thead>
+                                        <tr>
+                                             <th align="center" style="color: black; font-family: 'Times New Roman'; font-size: 14px">NO</th>
+                                             <th align="center" style="color: black; font-family: 'Times New Roman'; font-size: 14px">PENGGUNA</th>
+                                             <th align="center" style="color: black; font-family: 'Times New Roman'; font-size: 14px">TANGGAL</th>
+                                             <th align="center" style="color: black; font-family: 'Times New Roman'; font-size: 14px">BARANG</th>
+                                             <th align="center" style="color: black; font-family: 'Times New Roman'; font-size: 14px">SATUAN</th>
+                                             <th align="center" style="color: black; font-family: 'Times New Roman'; font-size: 14px">UKURAN</th>
+                                             <th align="center" style="color: black; font-family: 'Times New Roman'; font-size: 14px">KUANTITAS</th>
+                                             <th align="center" style="color: black; font-family: 'Times New Roman'; font-size: 14px">HARGA</th>
+                                        </tr>
+                                   </thead>
+                                   <tbody>
+                                        @foreach ($retur as $key => $value)
+                                        <tr>
+                                             <td align="center" style="color: black; font-family: 'Times New Roman'; font-size: 12px">{{ $value['no'] }}.</td>
+                                             <td style="color: black; font-family: 'Times New Roman'; font-size: 12px">{!! $value['pengguna'] !!}</td>
+                                             <td style="color: black; font-family: 'Times New Roman'; font-size: 12px">{!! $value['tanggal'] !!}</td>
+                                             <td style="color: black; font-family: 'Times New Roman'; font-size: 12px">{!! $value['barang'] !!}</td>
+                                             <td style="color: black; font-family: 'Times New Roman'; font-size: 12px">{!! $value['satuan'] !!}</td>
+                                             <td style="color: black; font-family: 'Times New Roman'; font-size: 12px">{!! $value['ukuran'] !!}</td>
+                                             <td align="center" style="color: black; font-family: 'Times New Roman'; font-size: 12px">{!! $value['kuantitas'] !!}</td>
+                                             <td align="right" style="color: black; font-family: 'Times New Roman'; font-size: 12px;font-weight: bold;">{!! $value['harga'] !!}</td>
+                                        </tr>
+                                        @endforeach
                                    </tbody>
                               </table>
                          </div>
@@ -203,11 +194,11 @@
      <div class="page-footer">
      </div>
      <script type="text/javascript">
-             window.print();
-             window.focus();
-             window.onafterprint = function() {
-                 window.close();
-             }
+          window.print();
+          window.focus();
+          window.onafterprint = function() {
+               window.close();
+          }
      </script>
 </body>
 

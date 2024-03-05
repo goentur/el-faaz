@@ -28,6 +28,7 @@ Route::middleware('auth', 'can:riwayat')->prefix('riwayat')->group(function () {
         Route::post('data', [RiwayatPenjualanController::class, 'data'])->name('riwayat.penjualan.data');
         Route::get('detail/{id}', [RiwayatPenjualanController::class, 'detail'])->name('riwayat.penjualan.detail');
         Route::post('detail/daftar-barang', [RiwayatPenjualanController::class, 'daftarBarang'])->name('riwayat.penjualan.daftar.barang');
+        Route::post('detail/daftar-barang-retur', [RiwayatPenjualanController::class, 'daftarBarangRetur'])->name('riwayat.penjualan.daftar.barang.retur');
         Route::post('detail/data-angsuran', [RiwayatPenjualanController::class, 'detailDataAngsuran'])->name('riwayat.penjualan.detail.data.angsuran');
     });
 });

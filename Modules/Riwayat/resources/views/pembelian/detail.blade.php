@@ -28,7 +28,7 @@
                     <tr>
                         <td class="fw-bold">TANGGAL</td>
                         <td>:</td>
-                        <td>{{ date('Y-m-d H:i:s', ($pembelian->tanggal + $zonaWaktuPengguna->gmt_offset)) . ' ' . $zonaWaktuPengguna->singkatan }}</td>
+                        <td>{{ formatTanggal($pembelian->tanggal, $zonaWaktuPengguna) }}</td>
                     </tr>
                     <tr>
                         <td class="fw-bold">KETERANGA</td>

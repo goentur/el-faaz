@@ -26,17 +26,11 @@ class DaganganController extends Controller
     public function index(Request $request, Builder $builder)
     {
         if ($request->ajax()) {
-            return DataTables::eloquent(BarangDetail::with('barang', 'satuan', 'warna', 'ukuran')->select('id', 'barang_id', 'satuan_id', 'warna_id', 'foto')->orderBy('id', 'desc'))
+            return DataTables::eloquent(BarangDetail::with('barang', 'satuan', 'warna', 'ukuran')->select('id', 'satuan_id', 'nama', 'foto')->orderBy('id', 'desc'))
                 ->addIndexColumn()
-                ->editColumn('barang.nama', function (BarangDetail $data) {
-                    return $data->barang ? $data->barang->nama : view('errors.master-data');
-                })
                 ->editColumn('satuan.nama', function (BarangDetail $data) {
                     return $data->satuan ? $data->satuan->nama : view('errors.master-data');
-                })
-                ->editColumn('warna.nama', function (BarangDetail $data) {
-                    return $data->warna ? $data->warna->nama : view('errors.master-data');
-                })
+            })
                 ->editColumn('foto', function (BarangDetail $data) {
                     return view($this->attribute['view'] . 'foto', [
                         'data' => $data,
@@ -64,9 +58,8 @@ class DaganganController extends Controller
         $dataTable = $builder
             ->addIndex(['class' => 'w-1 text-center top', 'data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => 'NO'])
             ->addColumn(['class' => 'w-10 text-center', 'data' => 'foto', 'name' => 'foto', 'title' => 'FOTO'])
-            ->addColumn(['class' => 'top', 'data' => 'barang.nama', 'name' => 'barang.nama', 'title' => 'NAMA'])
+            ->addColumn(['class' => 'top', 'data' => 'nama', 'name' => 'nama', 'title' => 'NAMA'])
             ->addColumn(['class' => 'w-1 top', 'data' => 'satuan.nama', 'name' => 'satuan.nama', 'title' => 'SATUAN'])
-            ->addColumn(['class' => 'w-5 top', 'data' => 'warna.nama', 'name' => 'warna.nama', 'title' => 'WARNA'])
             ->addColumn(['class' => 'w-5 top', 'data' => 'ukuran.nama', 'name' => 'ukuran.nama', 'title' => 'UKURAN'])
             ->addColumn(['class' => 'w-1 top', 'data' => 'aksi', 'name' => 'aksi', 'title' => 'AKSI'])
             ->parameters([
@@ -107,10 +100,13 @@ class DaganganController extends Controller
             'ukuran' => 'required|array|min:1',
             'ukuran.*' => 'required|numeric|distinct|min:1',
         ]);
+        $barang = Barang::select('id', 'nama')->find($request->barang);
+        $warna = Warna::select('id', 'nama')->find($request->warna);
         $barangDetail = BarangDetail::create([
             'barang_id' => $request->barang,
             'satuan_id' => $request->satuan,
             'warna_id' => $request->warna,
+            'nama' => $barang->nama . ' - ' . $warna->nama,
             'foto' => Str::after($request->foto, url('')),
         ]);
         $barangDetail->ukuran()->sync($request->ukuran);
@@ -146,10 +142,13 @@ class DaganganController extends Controller
             'ukuran.*' => 'required|numeric|distinct|min:1',
         ]);
         $barangDetail = BarangDetail::with('ukuran')->select('id')->find(dekrip($id));
+        $barang = Barang::select('id', 'nama')->find($request->barang);
+        $warna = Warna::select('id', 'nama')->find($request->warna);
         $barangDetail->update([
             'barang_id' => $request->barang,
             'satuan_id' => $request->satuan,
             'warna_id' => $request->warna,
+            'nama' => $barang->nama . ' - ' . $warna->nama,
             'foto' => Str::after($request->foto, url('')),
         ]);
         $barangDetail->ukuran()->sync($request->ukuran);
@@ -264,9 +263,7 @@ class DaganganController extends Controller
             'nama' => 'required|string',
         ]);
         if ($request->ajax()) {
-            $barangDetail = BarangDetail::with('barang', 'satuan', 'warna', 'ukuran')->select('id', 'barang_id', 'satuan_id', 'warna_id', 'foto')->orderBy('id', 'desc')->whereHas('barang', function ($q) use ($request) {
-                $q->where('nama', 'like', '%' . $request->nama . '%');
-            })->limit(10);
+            $barangDetail = BarangDetail::with('barang', 'satuan', 'warna', 'ukuran')->select('id', 'barang_id', 'satuan_id', 'warna_id', 'foto')->where('nama', 'like', '%' . $request->nama . '%')->orderBy('id', 'desc')->limit(10);
             if ($barangDetail->count() > 0) {
                 $data = [];
                 foreach ($barangDetail->get() as $k) {
