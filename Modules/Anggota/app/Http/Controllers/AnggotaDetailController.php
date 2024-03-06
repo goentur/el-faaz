@@ -11,7 +11,7 @@ use Illuminate\View\View;
 
 class AnggotaDetailController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $request->validate([
             'id' => 'required',
@@ -163,23 +163,19 @@ class AnggotaDetailController extends Controller
                 $bayar += $p->bayar;
                 foreach ($p->penjualanDetail as $pd) {
                     if ($pd->pemasokBarangDetail && $pd->pemasokBarangDetail->barangDetail) {
-                        $pemasok = '<span class="badge bg-danger">TIDAK TERDAFTAR</span>';
-                        if ($pd->pemasokBarangDetail->pemasok) {
-                            $pemasok = $pd->pemasokBarangDetail->pemasok->nama;
-                        }
-                        $barang = '<span class="badge bg-danger">TIDAK TERDAFTAR</span>';
+                        $barang = 'TIDAK TERDAFTAR';
                         if ($pd->pemasokBarangDetail->barangDetail->barang) {
                             $barang = $pd->pemasokBarangDetail->barangDetail->barang->nama;
                         }
-                        $warna = ' - <span class="badge bg-danger">TIDAK TERDAFTAR</span>';
+                        $warna = ' - TIDAK TERDAFTAR';
                         if ($pd->pemasokBarangDetail->barangDetail->warna) {
                             $warna = ' - ' . $pd->pemasokBarangDetail->barangDetail->warna->nama;
                         }
-                        $satuan = '<span class="badge bg-danger">TIDAK TERDAFTAR</span>';
+                        $satuan = 'TIDAK TERDAFTAR';
                         if ($pd->pemasokBarangDetail->barangDetail->satuan) {
                             $satuan = $pd->pemasokBarangDetail->barangDetail->satuan->nama;
                         }
-                        $ukuran = '<span class="badge bg-danger">TIDAK TERDAFTAR</span>';
+                        $ukuran = 'TIDAK TERDAFTAR';
                         if ($pd->pemasokBarangDetail->barangDetail->ukuran) {
                             $ukuran = '';
                             foreach ($pd->pemasokBarangDetail->barangDetail->ukuran as $u) {
@@ -193,15 +189,13 @@ class AnggotaDetailController extends Controller
                         $dataPenjualan[] = [
                             'idPenjualan' => $p->id,
                             'idPenjualanDetail' => $pd->id,
-                            'pengguna' => $p->user ? $p->user->name : '<span class="badge bg-danger">PENGGUNA TIDAK DITEMUKAN</span>',
-                            'pemasok' => $pemasok,
+                            'pengguna' => $p->user ? $p->user->name : 'PENGGUNA TIDAK DITEMUKAN',
                             'barang' => $barang . '' . $warna,
                             'satuan' => $satuan,
                             'ukuran' => $ukuran,
                             'tanggal' => formatTanggal($pd->tanggal, $zonaWaktuPengguna, true),
                             'kuantitas' => $pd->kuantitas,
                             'harga' => rupiah($pd->harga),
-                            'status' => $pd->status == 1 ? '<span class="badge bg-danger">TIDAK</span>' : '<span class="badge bg-success">TERSEDIA</span>',
                         ];
                     }
                 }
@@ -213,7 +207,7 @@ class AnggotaDetailController extends Controller
                             'idPenjualanDetail' => $prd->transaksi_detail_id,
                             'kuantitas' => $prd->kuantitas,
                             'tanggal' => formatTanggal($prd->tanggal, $zonaWaktuPengguna, true),
-                            'pengguna' => $p->user ? $p->user->name : '<span class="badge bg-danger">PENGGUNA TIDAK DITEMUKAN</span>',
+                            'pengguna' => $p->user ? $p->user->name : 'PENGGUNA TIDAK DITEMUKAN',
                         ];
                     }
                 }
@@ -236,7 +230,6 @@ class AnggotaDetailController extends Controller
                         }
                         $hasilDataRetur[] = [
                             'pengguna' => $item2['pengguna'],
-                            'pemasok' => $item1['pemasok'],
                             'barang' => $item1['barang'],
                             'satuan' => $item1['satuan'],
                             'ukuran' => $item1['ukuran'],
@@ -254,23 +247,21 @@ class AnggotaDetailController extends Controller
             $resultArray = array_map(function ($item) {
                 return [
                     'pengguna' => $item['pengguna'],
-                    'pemasok' => $item['pemasok'],
                     'barang' => $item['barang'],
                     'satuan' => $item['satuan'],
                     'ukuran' => $item['ukuran'],
                     'tanggal' => $item['tanggal'],
                     'kuantitas' => $item['kuantitas'],
                     'harga' => $item['harga'],
-                    'status' => $item['status']
                 ];
             }, $dataPenjualan);
             $no = 1;
             foreach ($resultArray as &$item1) {
-                $item1['no'] = $no++ . '.';
+                $item1['no'] = $no++;
             }
             $no = 1;
             foreach ($hasilDataRetur as &$item2) {
-                $item2['no'] = $no++ . '.';
+                $item2['no'] = $no++;
             }
             $kirim = [
                 'zonaWaktuPengguna' => $zonaWaktuPengguna,
